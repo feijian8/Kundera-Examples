@@ -17,7 +17,7 @@
  		</properties>	
 
 	</persistence-unit>
-	<persistence-unit name="twibase">
+	<persistence-unit name="twihbase">
 		<provider>com.impetus.kundera.KunderaPersistence</provider>
 		<properties>
 			<property name="kundera.nodes" value="localhost" />
@@ -34,8 +34,10 @@
 	<persistence-unit name="twingo">
 		<provider>com.impetus.kundera.KunderaPersistence</provider>
 		<properties>
-			<property name="kundera.nodes" value="192.168.145.84" />
-			<property name="kundera.port" value="27017" />
+ 			<property name="kundera.nodes" value="192.168.145.84" />
+ 		
+ 	        <!-- <property name="kundera.nodes" value="localhost" /> -->	
+            <property name="kundera.port" value="27017" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="mongodb" />
 			<property name="kundera.client" value="MongoDB" />

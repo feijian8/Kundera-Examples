@@ -80,7 +80,7 @@ public class PersonTest extends BaseTest
     @Before
     public void setUp() throws Exception
     {
-        emf = Persistence.createEntityManagerFactory("twissandra,twingo,twibase,picmysql");
+        emf = Persistence.createEntityManagerFactory("twissandra,twingo,twihbase,picmysql");
         em = emf.createEntityManager();
         col = new java.util.HashMap<Object, Object>();
     }
@@ -148,6 +148,7 @@ public class PersonTest extends BaseTest
     {
 //        cassandraSetUp();
         CassandraCli.cassandraSetUp();
+        CassandraCli.createKeySpace("KunderaExamples");
         loadData();
 
         Object p1 = prepareData("1", 10);
@@ -156,9 +157,9 @@ public class PersonTest extends BaseTest
         em.persist(p1);
         em.persist(p2);
         em.persist(p3);
-        // col.put("1", p1);
-        // col.put("2", p2);
-        // col.put("3", p3);
+         col.put("1", p1);
+         col.put("2", p2);
+         col.put("3", p3);
 
         PersonCassandra p = findById(PersonCassandra.class, "1", em);
         Assert.assertNotNull(p);
@@ -185,9 +186,10 @@ public class PersonTest extends BaseTest
         em.persist(p1);
         em.persist(p2);
         em.persist(p3);
-        // col.put("1", p1);
-        // col.put("2", p2);
-        // col.put("3", p3);
+        
+         col.put("1", p1);
+         col.put("2", p2);
+         col.put("3", p3);
         PersonCassandra p = findById(PersonCassandra.class, "1", em);
         Assert.assertNotNull(p);
         Assert.assertEquals("vivek", p.getPersonName());
@@ -198,7 +200,7 @@ public class PersonTest extends BaseTest
         assertOnMerge(em, "PersonCassandra", PersonCassandra.class, "vivek", "newvivek", "PERSON_NAME");
     }
 
-    @Test
+//    @Test
     public void onInsertHbase() throws Exception
     {
         HBaseCli.startCluster();
@@ -237,7 +239,7 @@ public class PersonTest extends BaseTest
     // o.add(PersonHBase.class);
     // }
 
-    // @Test
+//     @Test
     public void onInsertRdbms()
     {
         Object p1 = prepareRDBMSInstance("1", 10);

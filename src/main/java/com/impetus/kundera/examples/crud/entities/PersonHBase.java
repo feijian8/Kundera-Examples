@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * The Class Person.
  */
 @Entity
-@Table(name = "PERSON", schema = "KunderaExamples@twibase")
+@Table(name = "PERSON", schema = "KunderaExamples@twihbase")
 public class PersonHBase
 {
     

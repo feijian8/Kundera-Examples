@@ -59,7 +59,7 @@ public class OTMUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUni1ToM.class);
         clazzz.add(HabitatUni1ToM.class);
-        init(clazzz, "twingo", "twissandra");
+        init(clazzz, "twingo", "twissandra", "twihbase");
     }
 
     /**

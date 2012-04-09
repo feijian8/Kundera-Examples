@@ -59,7 +59,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
         clazzz.add(HabitatUniMToM.class);
-        init(clazzz, "twingo", "twissandra"/* , "twibase" */);
+        init(clazzz, "twingo", "twissandra", "twibase");
     }
 
     /**

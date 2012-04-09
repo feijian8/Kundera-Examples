@@ -71,7 +71,7 @@ public abstract class AssociationBase
      */
     protected void setUpInternal(String... colFamilies)
     {
-        String persistenceUnits = "rdbms,twingo,twissandra,twibase";
+        String persistenceUnits = "rdbms,twingo,twissandra,twihbase";
         dao = new UserAddressDaoImpl(persistenceUnits);
         em = dao.getEntityManager(persistenceUnits);
         this.colFamilies = colFamilies;

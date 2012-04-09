@@ -40,7 +40,7 @@ public class OTMBiAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelBi1ToM.class);
         clazzz.add(HabitatBi1ToM.class);
-        init(clazzz, "twingo", "twissandra"/*, "twibase"*/);
+        init(clazzz, "twingo", "twissandra", "twihbase");
     }
 
     /**

@@ -74,7 +74,7 @@ public class OTOUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUni1To1FK.class);
         clazzz.add(HabitatUni1To1FK.class);
-        init(clazzz, /* "rdbms", */"twingo", "twissandra", "twibase");
+        init(clazzz, /* "rdbms", */"twingo", "twissandra", "twihbase");
     }
 
     /**

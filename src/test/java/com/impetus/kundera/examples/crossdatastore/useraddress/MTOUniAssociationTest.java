@@ -59,7 +59,7 @@ public class MTOUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMTo1.class);
         clazzz.add(HabitatUniMTo1.class);
-        init(clazzz, "twingo", "twissandra");
+        init(clazzz, "twingo", "twissandra","twihbase");
     }
 
     /**
@@ -164,7 +164,7 @@ public class MTOUniAssociationTest extends TwinAssociation
     @After
     public void tearDown() throws Exception
     {
-        tearDownInternal();
+//        tearDownInternal();
         CassandraCli.dropKeySpace("KunderaExamples");
     }
 

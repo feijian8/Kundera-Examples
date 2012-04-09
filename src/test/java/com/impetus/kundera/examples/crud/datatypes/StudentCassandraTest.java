@@ -103,8 +103,10 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
      */
     @SuppressWarnings("deprecation")
     @Test
-    public void onInsert() throws Exception
+    public void onInsert() 
     {
+        try
+        {
         onInsert(new StudentCassandra());
 
         // find by id.
@@ -130,14 +132,20 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
 
         // find by without where clause.
         assertFindWithoutWhereClause(em, "StudentCassandra", StudentCassandra.class);
+        }catch(Exception e)
+        {
+            Assert.fail("Failure onInsert test");
+        }
     }
 
     /**
      * On merge.
      */
      @Test
-    public void onMerge() throws Exception
+    public void onMerge()
     {
+         try
+         {
         em.persist(prepareData((Long) studentId1, 78575785897L, "Amresh", true, 10, 'C', (byte) 5, (short) 8,
                 (float) 69.6, 163.76765654, enrolmentDate, enrolmentTime, joiningDateAndTime, new Integer(3), new Long(
                         978423946455l), 135434.89, newSqlDate, sqlTime, sqlTimestamp, bigDecimal, bigInteger, calendar,
@@ -154,6 +162,10 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
         List<StudentCassandra> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertEquals(1, results.size());
+         }catch(Exception e)
+         {
+             Assert.fail("Failure onMerge test");
+         }
 
     }
 

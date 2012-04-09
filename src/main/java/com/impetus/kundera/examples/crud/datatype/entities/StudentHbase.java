@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "STUDENT", schema = "KunderaExamples@twibase")
+@Table(name = "STUDENT", schema = "KunderaExamples@twihbase")
 public class StudentHbase  implements StudentEntityDef{
 	// Primitive Types
 	@Id

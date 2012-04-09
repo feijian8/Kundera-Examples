@@ -37,7 +37,7 @@ public class MTMBiAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelBiMToM.class);
         clazzz.add(HabitatBiMToM.class);
-        init(clazzz, "twingo", "twissandra");
+        init(clazzz, "twingo", "twissandra", "twihbase");
     }
 
     /**

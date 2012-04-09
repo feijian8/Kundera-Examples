@@ -40,7 +40,7 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
         HBaseCli.createTable("KunderaExamples");
         HBaseCli.addColumnFamily("KunderaExamples", "STUDENT");
 
-        setupInternal("twibase");
+        setupInternal("twihbase");
     }
 
     /**

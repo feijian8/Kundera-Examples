@@ -62,8 +62,8 @@ public class MongoMapTest
         Assert.assertNotNull(reloadStuff);
         Assert.assertNotNull(reloadStuff.getMyMap());
         Assert.assertEquals(2, reloadStuff.getMyMap().size());
-        Assert.assertEquals(1234, reloadStuff.getMyMap().get("99").intValue());
-        Assert.assertEquals(67432, reloadStuff.getMyMap().get("12").intValue());
+        Assert.assertEquals(1234, reloadStuff.getMyMap().get(99).intValue());
+        Assert.assertEquals(67432, reloadStuff.getMyMap().get(12).intValue());
     }
 
     /**

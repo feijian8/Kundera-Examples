@@ -121,7 +121,7 @@ public class PersonAssociationTest extends BaseTest
 
         Assert.assertNotNull(emp);
         Assert.assertEquals("2_m", emp.getManager().getPersonId());
-        Assert.assertNotNull(emp.getEmployees());
+        Assert.assertNull(emp.getEmployees());
         Assert.assertNotNull(emp.getManager().getEmployees());
         Assert.assertFalse(emp.getManager().getEmployees().isEmpty());
         Assert.assertEquals(2, emp.getManager().getEmployees().size());

@@ -59,7 +59,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
         clazzz.add(HabitatUniMToM.class);
-        init(clazzz, "twingo", "twissandra", "twibase");
+        init(clazzz, "twingo", "twissandra", "twihbase");
     }
 
     /**
@@ -80,7 +80,13 @@ public class MTMUniAssociationTest extends TwinAssociation
     @Test
     public void testInsert()
     {
+        try
+        {
         tryOperation();
+        }catch(Exception e)
+        {
+            Assert.fail("Failed, Caused by:"  + e.getMessage());
+        }
     }
 
     @Override

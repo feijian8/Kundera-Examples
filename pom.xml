@@ -69,14 +69,14 @@
 			<name>Morphia Repo at Google Code</name>
 			<url>http://morphia.googlecode.com/svn/mavenrepo</url>
 		</repository>
-                <repository>
-                        <id>maven.scale7.org</id>
-                        <name>Scale7 Maven Repo</name>
-                        <url>https://github.com/s7/mvnrepo/raw/master</url>
-                        <snapshots>
-                           <enabled>true</enabled>
-                       </snapshots>
-               </repository>
+		<repository>
+			<id>maven.scale7.org</id>
+			<name>Scale7 Maven Repo</name>
+			<url>https://github.com/s7/mvnrepo/raw/master</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<reporting>
 		<plugins>
@@ -141,12 +141,12 @@
 	</reporting>
 
 	<dependencies>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.5</version>
-		<scope>test</scope>
-	</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-collections</groupId>
@@ -273,8 +273,11 @@
 		</dependency>
 
 		<!-- HBase depndencies -->
-
-
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase</artifactId>
+			<version>0.90.4</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
@@ -283,8 +286,8 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-	
-	<dependency>
+
+		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId> hadoop-test </artifactId>
 			<version>0.20.2</version>
@@ -295,12 +298,8 @@
 			<artifactId>hadoop-core</artifactId>
 			<version>0.20.2</version>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.apache.hbase.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.2.2</version>
-		</dependency>
- -->
+		<!-- <dependency> <groupId>org.apache.hbase.zookeeper</groupId> <artifactId>zookeeper</artifactId> 
+			<version>3.2.2</version> </dependency> -->
 		<!-- MongoDB depndencies -->
 		<dependency>
 			<groupId>com.mongodb</groupId>
@@ -398,6 +397,14 @@
 			<groupId>javax.jdo</groupId>
 			<artifactId>jdo-api</artifactId>
 			<version>3.0</version>
+		</dependency>
+
+		<!-- For in container -->
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>ejb-api</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.cassandra.thrift.InvalidRequestException;
 import org.apache.cassandra.thrift.SchemaDisagreementException;
 import org.apache.commons.logging.Log;
@@ -80,7 +82,9 @@ public abstract class TwinAssociation extends AssociationBase
         {
             switchPersistenceUnits(c);
             insert();
-            find();
+            find(); 
+            //update();
+            //remove();
         }
         } catch(Exception e)
         {
@@ -98,5 +102,9 @@ public abstract class TwinAssociation extends AssociationBase
      * All unit test cases must implement it.
      */
     protected abstract void insert();
+    
+    protected abstract void update();
+    
+    protected abstract void remove();
 
 }

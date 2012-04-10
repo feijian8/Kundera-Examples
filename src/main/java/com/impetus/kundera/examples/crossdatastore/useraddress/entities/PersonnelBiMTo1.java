@@ -14,7 +14,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name = "PERSONNEL", schema = "hibernatepoc")
+@Table(name = "PERSONNEL", schema = "KunderaExamples@twingo")
 public class PersonnelBiMTo1 {
 	@Id
 	@Column(name = "PERSON_ID")

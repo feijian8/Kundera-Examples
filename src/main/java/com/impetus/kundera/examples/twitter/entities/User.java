@@ -26,7 +26,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "USER", schema = "KunderaExamples@twissandra")
+@Table(name = "USER", schema = "KunderaExamples@twibase")
 public class User 
 {
 

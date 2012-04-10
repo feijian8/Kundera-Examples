@@ -154,6 +154,18 @@ public class MTOUniAssociationTest extends TwinAssociation
     {
 
     }
+    
+    
+
+    @Override
+    protected void update()
+    {
+    }
+
+    @Override
+    protected void remove()
+    {
+    }
 
     /**
      * Tear down.

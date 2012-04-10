@@ -177,6 +177,18 @@ public class MTMUniAssociationTest extends TwinAssociation
         col.add(address2);
         col.add(address3);
     }
+    
+    
+
+    @Override
+    protected void update()
+    {
+    }
+
+    @Override
+    protected void remove()
+    {
+    }
 
     /**
      * Test merge.

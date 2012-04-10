@@ -136,6 +136,18 @@ public class MTOBiAssociationTest extends TwinAssociation
         col.add(address);
 
     }
+    
+    
+
+    @Override
+    protected void update()
+    {
+    }
+
+    @Override
+    protected void remove()
+    {
+    }
 
     /**
      * Test merge.

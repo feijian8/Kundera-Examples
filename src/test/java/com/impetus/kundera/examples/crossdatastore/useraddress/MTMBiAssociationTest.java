@@ -72,7 +72,18 @@ public class MTMBiAssociationTest extends TwinAssociation
     protected void insert()
     {
         // TODO Auto-generated method stub
+    }
+    
+    
 
+    @Override
+    protected void update()
+    {
+    }
+
+    @Override
+    protected void remove()
+    {
     }
 
     /**

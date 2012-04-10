@@ -23,10 +23,8 @@ import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatBi1To1FK;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUni1To1FK;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelBi1To1FK;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUni1To1FK;
 
 public class OTOBiAssociationTest extends TwinAssociation
 {

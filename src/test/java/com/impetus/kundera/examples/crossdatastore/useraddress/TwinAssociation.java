@@ -84,8 +84,8 @@ public abstract class TwinAssociation extends AssociationBase
         }
         } catch(Exception e)
         {
-            e.printStackTrace();
             log.error(e);
+            Assert.fail("Failure caused by:"+ e.getMessage());
         }
     }
 

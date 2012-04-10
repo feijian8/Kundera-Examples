@@ -2,6 +2,7 @@ package com.impetus.kundera.examples.crossdatastore.useraddress.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class PersonnelUniMToM
     @Embedded
     PersonalData personalData;
 
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "PERSONNEL_ADDRESS", joinColumns = { @JoinColumn(name = "PERSON_ID") }, inverseJoinColumns = { @JoinColumn(name = "ADDRESS_ID") })
     private Set<HabitatUniMToM> addresses;
 

@@ -56,7 +56,7 @@ public class MTMBiAssociationTest extends TwinAssociation
      * Test insert.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
     }
@@ -73,8 +73,6 @@ public class MTMBiAssociationTest extends TwinAssociation
     {
         // TODO Auto-generated method stub
     }
-    
-    
 
     @Override
     protected void update()
@@ -84,15 +82,6 @@ public class MTMBiAssociationTest extends TwinAssociation
     @Override
     protected void remove()
     {
-    }
-
-    /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
     }
 
     /**

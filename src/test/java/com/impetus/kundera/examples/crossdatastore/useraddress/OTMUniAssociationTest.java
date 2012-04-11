@@ -57,10 +57,11 @@ public class OTMUniAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        if(RUN_IN_EMBEDDED_MODE) {
+        if (RUN_IN_EMBEDDED_MODE)
+        {
             CassandraCli.cassandraSetUp();
         }
-        
+
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUni1ToM.class);
         clazzz.add(HabitatUni1ToM.class);
@@ -83,33 +84,9 @@ public class OTMUniAssociationTest extends TwinAssociation
      * Test insert.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
-    }
-
-    @Override
-    protected void find()
-    {
-        // Find Person
-        PersonnelUni1ToM p = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
-        Assert.assertNotNull(p);
-        Assert.assertEquals("unionetomany_1", p.getPersonId());
-        Assert.assertEquals("Amresh", p.getPersonName());
-        PersonalData pd = p.getPersonalData();
-        Assert.assertNotNull(pd);
-        Assert.assertEquals("www.amresh.com", pd.getWebsite());
-
-        Set<HabitatUni1ToM> adds = p.getAddresses();
-        Assert.assertNotNull(adds);
-        Assert.assertFalse(adds.isEmpty());
-        Assert.assertEquals(2, adds.size());
-
-        for (HabitatUni1ToM address : adds)
-        {
-            Assert.assertNotNull(address.getStreet());
-        }
-
     }
 
     @Override
@@ -138,25 +115,54 @@ public class OTMUniAssociationTest extends TwinAssociation
         col.add(address1);
         col.add(address2);
 
-    }    
+    }
+
+    @Override
+    protected void find()
+    {
+        // Find Person
+        PersonnelUni1ToM p = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
+        Assert.assertNotNull(p);
+        Assert.assertEquals("unionetomany_1", p.getPersonId());
+        Assert.assertEquals("Amresh", p.getPersonName());
+        PersonalData pd = p.getPersonalData();
+        Assert.assertNotNull(pd);
+        Assert.assertEquals("www.amresh.com", pd.getWebsite());
+
+        Set<HabitatUni1ToM> adds = p.getAddresses();
+        Assert.assertNotNull(adds);
+        Assert.assertFalse(adds.isEmpty());
+        Assert.assertEquals(2, adds.size());
+
+        for (HabitatUni1ToM address : adds)
+        {
+            Assert.assertNotNull(address.getStreet());
+        }
+
+    }
 
     @Override
     protected void update()
     {
         try
         {
-            for(Object entity : col) {
-                if(entity.getClass().equals(PersonnelUni1ToM.class)) {
-                    PersonnelUni1ToM personnel = (PersonnelUni1ToM) entity;
-                    personnel.setPersonName("Saurabh");
-                    dao.merge(personnel);
-                } else if(entity.getClass().equals(HabitatUni1ToM.class)) {
-                    HabitatUni1ToM address = (HabitatUni1ToM) entity;
-                    address.setStreet("Brand new street");
-                    dao.merge(address);
-                }
+            PersonnelUni1ToM p = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
+            Assert.assertNotNull(p);
+            p.setPersonName("Saurabh");
+
+            for (HabitatUni1ToM address : p.getAddresses())
+            {
+                address.setStreet("Brand New Street");
             }
-            
+            dao.merge(p);
+            PersonnelUni1ToM pAfterMerge = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
+            Assert.assertNotNull(pAfterMerge);
+            Assert.assertEquals("Saurabh", pAfterMerge.getPersonName());
+
+            for (HabitatUni1ToM address : pAfterMerge.getAddresses())
+            {
+                Assert.assertEquals("Brand New Street", address.getStreet());
+            }
         }
         catch (Exception e)
         {
@@ -170,24 +176,18 @@ public class OTMUniAssociationTest extends TwinAssociation
     {
         try
         {
-            
             PersonnelUni1ToM p = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
-            dao.removePerson(p);          
+            dao.removePerson(p);
+            PersonnelUni1ToM pAfterRemoval = (PersonnelUni1ToM) dao
+                    .findPerson(PersonnelUni1ToM.class, "unionetomany_1");
+            Assert.assertNull(pAfterRemoval);
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
             Assert.fail();
         }
-    }
-
-    /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
     }
 
     /**
@@ -200,10 +200,11 @@ public class OTMUniAssociationTest extends TwinAssociation
     public void tearDown() throws Exception
     {
         tearDownInternal();
-        if(AUTO_MANAGE_SCHEMA) {
+        if (AUTO_MANAGE_SCHEMA)
+        {
             CassandraCli.dropKeySpace("KunderaExamples");
         }
-        
+
     }
 
     @Override

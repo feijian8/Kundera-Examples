@@ -70,23 +70,24 @@ public abstract class TwinAssociation extends AssociationBase
     /**
      * Try operation.
      */
-    protected void tryOperation() 
+    protected void tryOperation()
     {
         try
         {
-        for (Map<Class, String> c : combinations)
-        {
-            switchPersistenceUnits(c);
-            insert();
-            find(); 
-            //update();
-            //remove();
+            for (Map<Class, String> c : combinations)
+            {
+                switchPersistenceUnits(c);
+                insert();
+                find();
+                update();
+                remove();
+            }
         }
-        } catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             log.error(e);
-            Assert.fail("Failure caused by:"+ e.getMessage());
+            Assert.fail("Failure caused by:" + e.getMessage());
         }
     }
 
@@ -99,9 +100,9 @@ public abstract class TwinAssociation extends AssociationBase
      * All unit test cases must implement it.
      */
     protected abstract void insert();
-    
+
     protected abstract void update();
-    
+
     protected abstract void remove();
 
 }

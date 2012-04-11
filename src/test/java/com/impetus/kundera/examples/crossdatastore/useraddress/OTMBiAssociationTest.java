@@ -36,7 +36,8 @@ public class OTMBiAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        if(RUN_IN_EMBEDDED_MODE) {
+        if (RUN_IN_EMBEDDED_MODE)
+        {
             CassandraCli.cassandraSetUp();
         }
         List<Class> clazzz = new ArrayList<Class>(2);
@@ -61,7 +62,7 @@ public class OTMBiAssociationTest extends TwinAssociation
      * Test insert.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
     }
@@ -122,8 +123,7 @@ public class OTMBiAssociationTest extends TwinAssociation
         col.add(address1);
         col.add(address2);
 
-    }   
-    
+    }
 
     @Override
     protected void update()
@@ -136,15 +136,6 @@ public class OTMBiAssociationTest extends TwinAssociation
     }
 
     /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
-    }
-
-    /**
      * Tear down.
      * 
      * @throws Exception
@@ -154,7 +145,8 @@ public class OTMBiAssociationTest extends TwinAssociation
     public void tearDown() throws Exception
     {
         tearDownInternal();
-        if(AUTO_MANAGE_SCHEMA) {
+        if (AUTO_MANAGE_SCHEMA)
+        {
             CassandraCli.dropKeySpace("KunderaExamples");
         }
     }

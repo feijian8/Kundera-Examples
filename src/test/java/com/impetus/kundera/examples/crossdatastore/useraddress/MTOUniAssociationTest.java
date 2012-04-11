@@ -59,7 +59,7 @@ public class MTOUniAssociationTest extends TwinAssociation
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMTo1.class);
         clazzz.add(HabitatUniMTo1.class);
-        init(clazzz, "twingo", "twissandra","twihbase");
+        init(clazzz, "twingo", "twissandra", "twihbase");
     }
 
     /**
@@ -75,12 +75,43 @@ public class MTOUniAssociationTest extends TwinAssociation
     }
 
     /**
-     * Test insert.
+     * Test CRUD.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
+    }
+
+    @Override
+    protected void insert()
+    {
+        PersonnelUniMTo1 person1 = new PersonnelUniMTo1();
+        person1.setPersonId("unimanytoone_1");
+        person1.setPersonName("Amresh");
+        person1.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+
+        PersonnelUniMTo1 person2 = new PersonnelUniMTo1();
+        person2.setPersonId("unimanytoone_2");
+        person2.setPersonName("Vivek");
+        person2.setPersonalData(new PersonalData("www.vivek.com", "vivek@gmail.com", "mevivs"));
+
+        HabitatUniMTo1 address = new HabitatUniMTo1();
+        address.setAddressId("unimanytoone_a");
+        address.setStreet("AAAAAAAAAAAAA");
+
+        person1.setAddress(address);
+        person2.setAddress(address);
+
+        Set<PersonnelUniMTo1> persons = new HashSet<PersonnelUniMTo1>();
+        persons.add(person1);
+        persons.add(person2);
+
+        dao.savePersons(persons);
+
+        col.add(person1);
+        col.add(person2);
+        col.add(address);
     }
 
     @Override
@@ -119,52 +150,46 @@ public class MTOUniAssociationTest extends TwinAssociation
     }
 
     @Override
-    protected void insert()
-    {
-        PersonnelUniMTo1 person1 = new PersonnelUniMTo1();
-        person1.setPersonId("unimanytoone_1");
-        person1.setPersonName("Amresh");
-        person1.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
-
-        PersonnelUniMTo1 person2 = new PersonnelUniMTo1();
-        person2.setPersonId("unimanytoone_2");
-        person2.setPersonName("Vivek");
-        person2.setPersonalData(new PersonalData("www.vivek.com", "vivek@gmail.com", "mevivs"));
-
-        HabitatUniMTo1 address = new HabitatUniMTo1();
-        address.setAddressId("unimanytoone_a");
-        address.setStreet("AAAAAAAAAAAAA");
-
-        person1.setAddress(address);
-        person2.setAddress(address);
-
-        Set<PersonnelUniMTo1> persons = new HashSet<PersonnelUniMTo1>();
-        persons.add(person1);
-        persons.add(person2);
-
-        dao.savePersons(persons);
-
-        col.add(person1);
-        col.add(person2);
-        col.add(address);
-    }
-
-    @Test
-    public void testMerge()
-    {
-
-    }
-    
-    
-
-    @Override
     protected void update()
     {
+        // Find Person 1
+        PersonnelUniMTo1 p1 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
+        Assert.assertNotNull(p1);
+        p1.setPersonName("Saurabh");
+        p1.getAddress().setStreet("Brand New Street");
+        dao.merge(p1);
+        PersonnelUniMTo1 p1AfterMerge = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
+        Assert.assertNotNull(p1AfterMerge);
+        Assert.assertEquals("Saurabh", p1AfterMerge.getPersonName());
+        Assert.assertEquals("Brand New Street", p1AfterMerge.getAddress().getStreet());
+
+        // Find Person 2
+        PersonnelUniMTo1 p2 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
+        Assert.assertNotNull(p2);
+        p2.setPersonName("Prateek");
+        dao.merge(p2);
+        PersonnelUniMTo1 p2AfterMerge = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
+        Assert.assertNotNull(p2AfterMerge);
+        Assert.assertEquals("Prateek", p2AfterMerge.getPersonName());
+        Assert.assertEquals("Brand New Street", p2AfterMerge.getAddress().getStreet());
     }
 
     @Override
     protected void remove()
     {
+        // Find Person 1
+        PersonnelUniMTo1 p1 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
+        Assert.assertNotNull(p1);
+        dao.removePerson(p1);
+        PersonnelUniMTo1 p1AfterRemoval = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
+        Assert.assertNull(p1AfterRemoval);
+
+        // Find Person 2
+        PersonnelUniMTo1 p2 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
+        Assert.assertNotNull(p2);
+        dao.removePerson(p1);
+        PersonnelUniMTo1 p2AfterRemoval = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
+        Assert.assertNull(p2AfterRemoval);
     }
 
     /**

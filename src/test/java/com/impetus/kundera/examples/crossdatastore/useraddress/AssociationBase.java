@@ -48,14 +48,14 @@ import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
  */
 public abstract class AssociationBase
 {
-    public static final boolean RUN_IN_EMBEDDED_MODE = true;    
-    public static final boolean AUTO_MANAGE_SCHEMA = true;  
-    
-//    public static final String[] ALL_PUs_UNDER_TEST = new String[]{"twissandra"};
-    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms", */"twissandra", "twihbase", "twingo"};
-    
-    
-    
+    public static final boolean RUN_IN_EMBEDDED_MODE = true;
+
+    public static final boolean AUTO_MANAGE_SCHEMA = true;
+
+    // public static final String[] ALL_PUs_UNDER_TEST = new
+    // String[]{"twissandra"};
+    public static final String[] ALL_PUs_UNDER_TEST = new String[] {/* "rdbms", */"twissandra", "twihbase", "twingo" };
+
     /** The em. */
     protected EntityManager em;
 
@@ -79,7 +79,7 @@ public abstract class AssociationBase
     protected void setUpInternal(String... colFamilies)
     {
         String persistenceUnits = "twingo,twissandra,twihbase";
-//        String persistenceUnits = "rdbms,twissandra";
+        // String persistenceUnits = "rdbms,twissandra";
         dao = new UserAddressDaoImpl(persistenceUnits);
         em = dao.getEntityManager(persistenceUnits);
         this.colFamilies = colFamilies;
@@ -151,11 +151,13 @@ public abstract class AssociationBase
                 String client = puMetadata.getProperties().getProperty(PersistenceProperties.KUNDERA_CLIENT);
                 if (client.equalsIgnoreCase("pelops"))
                 {
-                    if(RUN_IN_EMBEDDED_MODE) {
+                    if (RUN_IN_EMBEDDED_MODE)
+                    {
                         CassandraCli.cassandraSetUp();
-                    }                    
+                    }
 
-                    if(AUTO_MANAGE_SCHEMA) {
+                    if (AUTO_MANAGE_SCHEMA)
+                    {
                         if (mAdd.getTableName().equalsIgnoreCase("ADDRESS"))
                         {
                             loadDataForHABITAT();
@@ -165,10 +167,11 @@ public abstract class AssociationBase
                             loadDataForPERSONNEL();
                         }
                     }
-                    
-                } else if(client.equalsIgnoreCase("hbase"))
+
+                }
+                else if (client.equalsIgnoreCase("hbase"))
                 {
-                    if(!HBaseCli.isStarted())
+                    if (!HBaseCli.isStarted())
                     {
                         String tableName = puMetadata.getProperties().getProperty(
                                 PersistenceProperties.KUNDERA_KEYSPACE);
@@ -201,22 +204,23 @@ public abstract class AssociationBase
     protected void tearDownInternal() throws InvalidRequestException, SchemaDisagreementException
     {
 
-        /*for (Object o : col)
-        {            
-            em.remove(o);
-            
-            
-        }*/
-        
-        if(AUTO_MANAGE_SCHEMA) {
+        /*
+         * for (Object o : col) { em.remove(o);
+         * 
+         * }
+         */
+
+        if (AUTO_MANAGE_SCHEMA)
+        {
             truncateSchema();
         }
-        
+
         dao.closeEntityManagerFactory();
-        
-        if(RUN_IN_EMBEDDED_MODE) {
+
+        if (RUN_IN_EMBEDDED_MODE)
+        {
             HBaseCli.stopCluster();
-        }        
+        }
 
     }
 

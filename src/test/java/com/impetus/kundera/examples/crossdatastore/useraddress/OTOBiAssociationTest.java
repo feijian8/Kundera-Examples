@@ -35,7 +35,8 @@ public class OTOBiAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        if(RUN_IN_EMBEDDED_MODE) {
+        if (RUN_IN_EMBEDDED_MODE)
+        {
             CassandraCli.cassandraSetUp();
         }
         List<Class> clazzz = new ArrayList<Class>(2);
@@ -57,10 +58,10 @@ public class OTOBiAssociationTest extends TwinAssociation
     }
 
     /**
-     * Test insert.
+     * Test CRUD
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
     }
@@ -106,8 +107,7 @@ public class OTOBiAssociationTest extends TwinAssociation
         col.add(person);
         col.add(address);
 
-    }    
-    
+    }
 
     @Override
     protected void update()
@@ -120,15 +120,6 @@ public class OTOBiAssociationTest extends TwinAssociation
     }
 
     /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
-    }
-
-    /**
      * Tear down.
      * 
      * @throws Exception
@@ -138,11 +129,11 @@ public class OTOBiAssociationTest extends TwinAssociation
     public void tearDown() throws Exception
     {
         tearDownInternal();
-        if(AUTO_MANAGE_SCHEMA) {
+        if (AUTO_MANAGE_SCHEMA)
+        {
             CassandraCli.dropKeySpace("KunderaExamples");
         }
     }
-
 
     @Override
     protected void loadDataForPERSONNEL() throws TException, InvalidRequestException, UnavailableException,

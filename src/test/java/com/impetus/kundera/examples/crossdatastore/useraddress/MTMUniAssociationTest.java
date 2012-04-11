@@ -55,7 +55,7 @@ public class MTMUniAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        CassandraCli.cassandraSetUp();        
+        CassandraCli.cassandraSetUp();
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
         clazzz.add(HabitatUniMToM.class);
@@ -78,54 +78,16 @@ public class MTMUniAssociationTest extends TwinAssociation
      * Test insert.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         try
         {
-        tryOperation();
-        }catch(Exception e)
-        {
-            Assert.fail("Failed, Caused by:"  + e.getMessage());
+            tryOperation();
         }
-    }
-
-    @Override
-    protected void find()
-    {
-
-        PersonnelUniMToM person1 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
-        Assert.assertNotNull(person1);
-        Assert.assertEquals("unimanytomany_1", person1.getPersonId());
-        Assert.assertEquals("Amresh", person1.getPersonName());
-        PersonalData pd1 = person1.getPersonalData();
-        Assert.assertNotNull(pd1);
-        Assert.assertEquals("www.amresh.com", pd1.getWebsite());
-        Set<HabitatUniMToM> addresses1 = person1.getAddresses();
-        Assert.assertNotNull(addresses1);
-        Assert.assertFalse(addresses1.isEmpty());
-        Assert.assertEquals(2, addresses1.size());
-        HabitatUniMToM address11 = (HabitatUniMToM) addresses1.toArray()[0];
-        Assert.assertNotNull(address11);
-        HabitatUniMToM address12 = (HabitatUniMToM) addresses1.toArray()[1];
-        Assert.assertNotNull(address12);
-
-        PersonnelUniMToM person2 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
-        Assert.assertNotNull(person2);
-
-        Assert.assertEquals("unimanytomany_2", person2.getPersonId());
-        Assert.assertEquals("Vivek", person2.getPersonName());
-        PersonalData pd2 = person2.getPersonalData();
-        Assert.assertNotNull(pd2);
-        Assert.assertEquals("www.vivek.com", pd2.getWebsite());
-        Set<HabitatUniMToM> addresses2 = person2.getAddresses();
-        Assert.assertNotNull(addresses2);
-        Assert.assertFalse(addresses2.isEmpty());
-        Assert.assertEquals(2, addresses2.size());
-        HabitatUniMToM address21 = (HabitatUniMToM) addresses2.toArray()[0];
-        Assert.assertNotNull(address21);
-        HabitatUniMToM address22 = (HabitatUniMToM) addresses2.toArray()[1];
-        Assert.assertNotNull(address22);
-
+        catch (Exception e)
+        {
+            Assert.fail("Failed, Caused by:" + e.getMessage());
+        }
     }
 
     @Override
@@ -177,26 +139,97 @@ public class MTMUniAssociationTest extends TwinAssociation
         col.add(address2);
         col.add(address3);
     }
-    
-    
+
+    @Override
+    protected void find()
+    {
+
+        PersonnelUniMToM person1 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
+        Assert.assertNotNull(person1);
+        Assert.assertEquals("unimanytomany_1", person1.getPersonId());
+        Assert.assertEquals("Amresh", person1.getPersonName());
+        PersonalData pd1 = person1.getPersonalData();
+        Assert.assertNotNull(pd1);
+        Assert.assertEquals("www.amresh.com", pd1.getWebsite());
+        Set<HabitatUniMToM> addresses1 = person1.getAddresses();
+        Assert.assertNotNull(addresses1);
+        Assert.assertFalse(addresses1.isEmpty());
+        Assert.assertEquals(2, addresses1.size());
+        HabitatUniMToM address11 = (HabitatUniMToM) addresses1.toArray()[0];
+        Assert.assertNotNull(address11);
+        HabitatUniMToM address12 = (HabitatUniMToM) addresses1.toArray()[1];
+        Assert.assertNotNull(address12);
+
+        PersonnelUniMToM person2 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
+        Assert.assertNotNull(person2);
+
+        Assert.assertEquals("unimanytomany_2", person2.getPersonId());
+        Assert.assertEquals("Vivek", person2.getPersonName());
+        PersonalData pd2 = person2.getPersonalData();
+        Assert.assertNotNull(pd2);
+        Assert.assertEquals("www.vivek.com", pd2.getWebsite());
+        Set<HabitatUniMToM> addresses2 = person2.getAddresses();
+        Assert.assertNotNull(addresses2);
+        Assert.assertFalse(addresses2.isEmpty());
+        Assert.assertEquals(2, addresses2.size());
+        HabitatUniMToM address21 = (HabitatUniMToM) addresses2.toArray()[0];
+        Assert.assertNotNull(address21);
+        HabitatUniMToM address22 = (HabitatUniMToM) addresses2.toArray()[1];
+        Assert.assertNotNull(address22);
+    }
 
     @Override
     protected void update()
     {
+        PersonnelUniMToM p1 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
+        Assert.assertNotNull(p1);
+        p1.setPersonName("Saurabh");
+        for (HabitatUniMToM address : p1.getAddresses())
+        {
+            address.setStreet("Brand New Street");
+        }
+        dao.merge(p1);
+        PersonnelUniMToM p1AfterMerge = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
+        Assert.assertNotNull(p1AfterMerge);
+        Assert.assertEquals("Saurabh", p1AfterMerge.getPersonName());
+        for (HabitatUniMToM address : p1AfterMerge.getAddresses())
+        {
+            Assert.assertEquals("Brand New Street", address.getStreet());
+        }
+
+        PersonnelUniMToM p2 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
+        Assert.assertNotNull(p2);
+        p2.setPersonName("Vijay");
+        for (HabitatUniMToM address : p2.getAddresses())
+        {
+            address.setStreet("Brand New Street");
+        }
+        dao.merge(p2);
+        PersonnelUniMToM p2AfterMerge = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
+        Assert.assertNotNull(p2AfterMerge);
+        Assert.assertEquals("Vijay", p2AfterMerge.getPersonName());
+        for (HabitatUniMToM address : p2AfterMerge.getAddresses())
+        {
+            Assert.assertEquals("Brand New Street", address.getStreet());
+        }
     }
 
     @Override
     protected void remove()
     {
-    }
+        PersonnelUniMToM person1 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
+        Assert.assertNotNull(person1);
+        dao.removePerson(person1);
+        PersonnelUniMToM person1AfterRemoval = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class,
+                "unimanytomany_1");
+        Assert.assertNull(person1AfterRemoval);
 
-    /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
+        PersonnelUniMToM person2 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
+        Assert.assertNotNull(person2);
+        dao.removePerson(person2);
+        PersonnelUniMToM person2AfterRemoval = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class,
+                "unimanytomany_2");
+        Assert.assertNull(person2AfterRemoval);
     }
 
     /**

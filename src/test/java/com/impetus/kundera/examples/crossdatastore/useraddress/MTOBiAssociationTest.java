@@ -60,7 +60,7 @@ public class MTOBiAssociationTest extends TwinAssociation
      * Test insert.
      */
     @Test
-    public void testInsert()
+    public void testCRUD()
     {
         tryOperation();
     }
@@ -136,8 +136,6 @@ public class MTOBiAssociationTest extends TwinAssociation
         col.add(address);
 
     }
-    
-    
 
     @Override
     protected void update()
@@ -147,15 +145,6 @@ public class MTOBiAssociationTest extends TwinAssociation
     @Override
     protected void remove()
     {
-    }
-
-    /**
-     * Test merge.
-     */
-    @Test
-    public void testMerge()
-    {
-
     }
 
     /**

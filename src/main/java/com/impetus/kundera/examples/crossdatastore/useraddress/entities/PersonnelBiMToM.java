@@ -11,7 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERSONNEL", schema = "KunderaExamples@addmongo")
+@Table(name = "PERSONNEL", schema = "KunderaExamples@twingo")
 public class PersonnelBiMToM
 {
     @Id

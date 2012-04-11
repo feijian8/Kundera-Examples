@@ -33,11 +33,15 @@ public class MTMBiAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        CassandraCli.cassandraSetUp();
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            CassandraCli.cassandraSetUp();
+            
+        }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelBiMToM.class);
         clazzz.add(HabitatBiMToM.class);
-        init(clazzz, "twingo", "twissandra", "twihbase");
+        init(clazzz, ALL_PUs_UNDER_TEST);
     }
 
     /**

@@ -52,7 +52,7 @@ public abstract class AssociationBase
     public static final boolean AUTO_MANAGE_SCHEMA = true;  
     
 //    public static final String[] ALL_PUs_UNDER_TEST = new String[]{"twissandra"};
-    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra",/* "twihbase", */"twingo"};
+    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra", "twihbase","twingo"};
     /** The em. */
     protected EntityManager em;
 

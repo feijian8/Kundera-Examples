@@ -200,7 +200,7 @@ public class PersonTest extends BaseTest
         assertOnMerge(em, "PersonCassandra", PersonCassandra.class, "vivek", "newvivek", "PERSON_NAME");
     }
 
-//    @Test
+    @Test
     public void onInsertHbase() throws Exception
     {
         HBaseCli.startCluster();

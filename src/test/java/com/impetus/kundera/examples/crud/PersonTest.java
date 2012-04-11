@@ -80,7 +80,7 @@ public class PersonTest extends BaseTest
     @Before
     public void setUp() throws Exception
     {
-        emf = Persistence.createEntityManagerFactory("twissandra,twingo,twihbase,picmysql");
+        emf = Persistence.createEntityManagerFactory("secIdxCassandra,twingo,twihbase,picmysql");
         em = emf.createEntityManager();
         col = new java.util.HashMap<Object, Object>();
     }

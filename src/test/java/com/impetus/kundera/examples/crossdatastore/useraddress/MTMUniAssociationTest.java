@@ -55,11 +55,14 @@ public class MTMUniAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        CassandraCli.cassandraSetUp();
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            CassandraCli.cassandraSetUp();
+        }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
         clazzz.add(HabitatUniMToM.class);
-        init(clazzz, "twingo", "twissandra", "twihbase");
+        init(clazzz, ALL_PUs_UNDER_TEST);
     }
 
     /**
@@ -217,16 +220,12 @@ public class MTMUniAssociationTest extends TwinAssociation
     @Override
     protected void remove()
     {
-        PersonnelUniMToM person1 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_1");
-        Assert.assertNotNull(person1);
-        dao.removePerson(person1);
+        dao.remove("unimanytomany_1", PersonnelUniMToM.class);
         PersonnelUniMToM person1AfterRemoval = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class,
                 "unimanytomany_1");
         Assert.assertNull(person1AfterRemoval);
 
-        PersonnelUniMToM person2 = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class, "unimanytomany_2");
-        Assert.assertNotNull(person2);
-        dao.removePerson(person2);
+        dao.remove("unimanytomany_2",PersonnelUniMToM.class);
         PersonnelUniMToM person2AfterRemoval = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class,
                 "unimanytomany_2");
         Assert.assertNull(person2AfterRemoval);

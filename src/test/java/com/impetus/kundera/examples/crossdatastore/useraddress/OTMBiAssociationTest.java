@@ -144,7 +144,7 @@ public class OTMBiAssociationTest extends TwinAssociation
     @After
     public void tearDown() throws Exception
     {
-        tearDownInternal();
+//        tearDownInternal();
         if (AUTO_MANAGE_SCHEMA)
         {
             CassandraCli.dropKeySpace("KunderaExamples");

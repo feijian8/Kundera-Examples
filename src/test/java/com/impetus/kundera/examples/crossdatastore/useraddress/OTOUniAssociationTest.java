@@ -191,15 +191,15 @@ public class OTOUniAssociationTest extends TwinAssociation
     {
         try
         {
-            PersonnelUni1To1FK p = (PersonnelUni1To1FK) dao.findPerson(PersonnelUni1To1FK.class, "unionetoonefk_1");
-            dao.removePerson(p);
+//            PersonnelUni1To1FK p = (PersonnelUni1To1FK) dao.findPerson(PersonnelUni1To1FK.class, "unionetoonefk_1");
+            dao.remove("unionetoonefk_1", PersonnelUni1To1FK.class);
+            
             PersonnelUni1To1FK pAfterRemoval = (PersonnelUni1To1FK) dao.findPerson(PersonnelUni1To1FK.class,
                     "unionetoonefk_1");
             Assert.assertNull(pAfterRemoval);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             Assert.fail();
         }
     }
@@ -295,7 +295,6 @@ public class OTOUniAssociationTest extends TwinAssociation
             ksDef = CassandraCli.client.describe_keyspace("KunderaExamples");
             CassandraCli.client.set_keyspace("KunderaExamples");
             List<CfDef> cfDefss = ksDef.getCf_defs();
-            // CassandraCli.client.set_keyspace("KunderaExamples");
             for (CfDef cfDef : cfDefss)
             {
 

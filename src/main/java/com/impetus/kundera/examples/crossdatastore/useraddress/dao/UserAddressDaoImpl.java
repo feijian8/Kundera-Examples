@@ -43,20 +43,7 @@ public class UserAddressDaoImpl extends BaseDao
         return personnel;
     }
 
-    public void removePerson(Object personnel)
-    {
-        em = getEntityManager(persistenceUnit);
-        em.remove(personnel);
-        closeEntityManager();
-    }
     
-    public void removeAddress(Object address)
-    {
-        em = getEntityManager(persistenceUnit);
-        em.remove(address);
-        closeEntityManager();
-    }
-
     public void savePersons(Set<?> personnels)
     {
         EntityManager em = getEntityManager(persistenceUnit);
@@ -69,6 +56,23 @@ public class UserAddressDaoImpl extends BaseDao
         closeEntityManager();
     }
 
+    public void remove(Object pKey, Class clazz)
+    {
+        em = getEntityManager(persistenceUnit);
+        Object obj = em.find(clazz, pKey);
+        em.remove(obj);
+        closeEntityManager();
+        
+    }
+   
+    public void merge(Object modifiedObj)
+    {
+        em = getEntityManager(persistenceUnit);
+        em.merge(modifiedObj);
+        closeEntityManager();
+        
+    }
+    
     public List<?> getAllPersons(String className)
     {
         EntityManager em = getEntityManager(persistenceUnit);
@@ -77,10 +81,5 @@ public class UserAddressDaoImpl extends BaseDao
         return persons;
     }
 
-    public void merge(Object personnel)
-    {
-        em = getEntityManager(persistenceUnit);
-        em.merge(personnel);
-        closeEntityManager();
-    }
+    
 }

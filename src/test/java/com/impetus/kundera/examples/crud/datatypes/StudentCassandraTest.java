@@ -75,7 +75,7 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
     {
         CassandraCli.cassandraSetUp();
         loadData();
-        setupInternal("twissandra");
+        setupInternal("secIdxCassandra");
     }
 
     /**

@@ -55,11 +55,15 @@ public class MTOUniAssociationTest extends TwinAssociation
     @BeforeClass
     public static void init() throws Exception
     {
-        CassandraCli.cassandraSetUp();
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            CassandraCli.cassandraSetUp();
+        }
+        
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMTo1.class);
         clazzz.add(HabitatUniMTo1.class);
-        init(clazzz, "twingo", "twissandra", "twihbase");
+        init(clazzz, ALL_PUs_UNDER_TEST);
     }
 
     /**
@@ -177,17 +181,13 @@ public class MTOUniAssociationTest extends TwinAssociation
     @Override
     protected void remove()
     {
-        // Find Person 1
-        PersonnelUniMTo1 p1 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
-        Assert.assertNotNull(p1);
-        dao.removePerson(p1);
+        // Remove Person 1
+        dao.remove("unimanytoone_1", PersonnelUniMTo1.class);
         PersonnelUniMTo1 p1AfterRemoval = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_1");
         Assert.assertNull(p1AfterRemoval);
 
-        // Find Person 2
-        PersonnelUniMTo1 p2 = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
-        Assert.assertNotNull(p2);
-        dao.removePerson(p1);
+        // Remove Person 2
+        dao.remove("unimanytoone_2", PersonnelUniMTo1.class);
         PersonnelUniMTo1 p2AfterRemoval = (PersonnelUniMTo1) dao.findPerson(PersonnelUniMTo1.class, "unimanytoone_2");
         Assert.assertNull(p2AfterRemoval);
     }

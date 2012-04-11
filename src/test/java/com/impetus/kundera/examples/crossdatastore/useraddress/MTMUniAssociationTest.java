@@ -58,6 +58,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         if (RUN_IN_EMBEDDED_MODE)
         {
             CassandraCli.cassandraSetUp();
+            
         }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);

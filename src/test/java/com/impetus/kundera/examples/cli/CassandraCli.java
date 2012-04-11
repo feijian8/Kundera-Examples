@@ -187,6 +187,31 @@ public final class CassandraCli {
             }
             return false;
         }
+        
+        public static boolean dropColumnFamily(String columnFamilyName, String keyspaceName)
+    {
+        try
+        {
+            if (columnFamilyExist(columnFamilyName, keyspaceName))
+            {
+                client.system_drop_column_family(columnFamilyName);
+            }
+        }
+        catch (InvalidRequestException e)
+        {
+            return true;
+        }
+        catch (SchemaDisagreementException e)
+        {
+            return false;
+        }
+        catch (TException e)
+        {
+            return false;
+        }
+        return false;
+   
+        }
         /**
          * Check if server running.
          *

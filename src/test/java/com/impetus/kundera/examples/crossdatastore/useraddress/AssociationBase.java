@@ -52,7 +52,7 @@ public abstract class AssociationBase
     public static final boolean AUTO_MANAGE_SCHEMA = true;  
     
 //    public static final String[] ALL_PUs_UNDER_TEST = new String[]{"twissandra"};
-    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra", "twihbase", "twingo"};
+    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra",/* "twihbase", */"twingo"};
     /** The em. */
     protected EntityManager em;
 
@@ -232,6 +232,9 @@ public abstract class AssociationBase
     protected void truncateSchema() throws InvalidRequestException, SchemaDisagreementException
     {
         log.warn("Truncating....");
+        CassandraCli.dropColumnFamily("PERSONNEL", "KunderaExamples");
+        CassandraCli.dropColumnFamily("ADDRESS", "KunderaExamples");
+        CassandraCli.dropColumnFamily("PERSONNEL_ADDRESS", "KunderaExamples");
         CassandraCli.dropKeySpace("KunderaExamples");
     }
 

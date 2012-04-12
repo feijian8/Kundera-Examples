@@ -10,7 +10,6 @@
 			<property name="kundera.port" value="9160"/>
 			<property name="kundera.keyspace" value="KunderaExamples"/>
 			<property name="kundera.dialect" value="cassandra"/>
-			<property name="kundera.client" value="Pelops"/>
 			<property name="kundera.client.lookup.class" value="com.impetus.client.cassandra.pelops.PelopsClientFactory" />
 			<property name="kundera.cache.provider.class" value="com.impetus.kundera.cache.ehcache.EhCacheProvider"/>
             <property name="kundera.cache.config.resource" value="/ehcache-test.xml"/>   
@@ -26,7 +25,6 @@
 			<property name="kundera.port" value="9160"/>
 			<property name="kundera.keyspace" value="KunderaExamples"/>
 			<property name="kundera.dialect" value="cassandra"/>
-			<property name="kundera.client" value="Pelops"/>
 			<property name="kundera.client.lookup.class" value="com.impetus.client.cassandra.pelops.PelopsClientFactory" />
 			<property name="kundera.cache.provider.class" value="com.impetus.kundera.cache.ehcache.EhCacheProvider"/>
             <property name="kundera.cache.config.resource" value="/ehcache-test.xml"/>   
@@ -42,7 +40,6 @@
 			<property name="kundera.port" value="0" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="hbase" />
-			<property name="kundera.client" value="Hbase" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.hbase.HBaseClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -59,7 +56,6 @@
             <property name="kundera.port" value="27017" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="mongodb" />
-			<property name="kundera.client" value="MongoDB" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.mongodb.MongoDBClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -122,7 +118,6 @@
 		<class>com.impetus.kundera.examples.crud.student.StudentRdbms</class>
 		
 		<properties>
-			<property name="kundera.client" value="rdbms" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.rdbms.RDBMSClientFactory" />
  			<property name="hibernate.hbm2ddl.auto" value="create" />
  			<property name="hibernate.max_fetch_depth" value="0" />
@@ -145,7 +140,6 @@
 			<property name="kundera.port" value="9160" />
 			<property name="kundera.keyspace" value="Pickr" />
 			<property name="kundera.dialect" value="cassandra" />
-			<property name="kundera.client" value="Pelops" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.cassandra.pelops.PelopsClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -160,7 +154,6 @@
 			<property name="kundera.port" value="9160" />
 			<property name="kundera.keyspace" value="Pickr" />
 			<property name="kundera.dialect" value="hbase" />
-			<property name="kundera.client" value="Hbase" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.hbase.HBaseClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -175,7 +168,6 @@
 			<property name="kundera.port" value="27017" />
 			<property name="kundera.keyspace" value="Pickr" />
 			<property name="kundera.dialect" value="mongodb" />
-			<property name="kundera.client" value="MongoDB" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.mongodb.MongoDBClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -212,7 +204,6 @@
 
 		<class>com.impetus.kundera.examples.student.Student</class>
 		<properties>
-			<property name="kundera.client" value="rdbms" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.rdbms.RDBMSClientFactory" />
 <!--			<property name="hibernate.hbm2ddl.auto" value="create" />-->
 			<property name="hibernate.show_sql" value="true" />
@@ -233,7 +224,6 @@
 			<property name="kundera.port" value="9160" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="cassandra" />
-			<property name="kundera.client" value="Pelops" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.cassandra.pelops.PelopsClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -248,7 +238,6 @@
 			<property name="kundera.port" value="9165" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="hbase" />
-			<property name="kundera.client" value="Hbase" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.hbase.HBaseClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -262,7 +251,6 @@
 			<property name="kundera.port" value="27017" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="mongodb" />
-			<property name="kundera.client" value="MongoDB" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.mongodb.MongoDBClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -278,7 +266,6 @@
 			<property name="kundera.port" value="9160" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="cassandra" />
-			<property name="kundera.client" value="Pelops" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.cassandra.pelops.PelopsClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -293,7 +280,6 @@
 			<property name="kundera.port" value="9165" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="hbase" />
-			<property name="kundera.client" value="Hbase" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.hbase.HBaseClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />
@@ -307,7 +293,6 @@
 			<property name="kundera.port" value="27017" />
 			<property name="kundera.keyspace" value="KunderaExamples" />
 			<property name="kundera.dialect" value="mongodb" />
-			<property name="kundera.client" value="MongoDB" />
 			<property name="kundera.client.lookup.class" value="com.impetus.client.mongodb.MongoDBClientFactory" />
 			<property name="kundera.cache.provider.class"
 				value="com.impetus.kundera.cache.ehcache.EhCacheProvider" />

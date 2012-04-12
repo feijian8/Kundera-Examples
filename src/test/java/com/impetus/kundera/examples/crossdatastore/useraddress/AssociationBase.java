@@ -145,8 +145,8 @@ public abstract class AssociationBase
                 PersistenceUnitMetadata puMetadata = KunderaMetadata.INSTANCE.getApplicationMetadata()
                         .getPersistenceUnitMetadata(pu);
 
-                String client = puMetadata.getProperties().getProperty(PersistenceProperties.KUNDERA_CLIENT);
-                if (client.equalsIgnoreCase("pelops"))
+                String client = puMetadata.getProperties().getProperty(PersistenceProperties.KUNDERA_CLIENT_FACTORY);
+                if (client.equalsIgnoreCase("com.impetus.client.cassandra.pelops.PelopsClientFactory"))
                 {
                     if (RUN_IN_EMBEDDED_MODE)
                     {
@@ -166,7 +166,7 @@ public abstract class AssociationBase
                     }
 
                 }
-                else if (client.equalsIgnoreCase("hbase"))
+                else if (client.equalsIgnoreCase("com.impetus.client.hbase.HBaseClientFactory"))
                 {
                     if (!HBaseCli.isStarted())
                     {

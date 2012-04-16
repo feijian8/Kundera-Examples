@@ -39,7 +39,7 @@ public class UserAddressDaoImpl extends BaseDao
     {
         em = getEntityManager(persistenceUnit);
         Object personnel = em.find(entityClass, personId);
-        closeEntityManager();
+        //closeEntityManager();
         return personnel;
     }
 

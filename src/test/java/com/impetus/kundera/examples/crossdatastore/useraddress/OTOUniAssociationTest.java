@@ -131,6 +131,7 @@ public class OTOUniAssociationTest extends TwinAssociation
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             Assert.fail();
         }
     }
@@ -167,7 +168,10 @@ public class OTOUniAssociationTest extends TwinAssociation
         {
             PersonnelUni1To1FK p = (PersonnelUni1To1FK) dao.findPerson(PersonnelUni1To1FK.class, "unionetoonefk_1");
             Assert.assertNotNull(p);
-
+            
+            dao.merge(p);   //This merge operation should do nothing since nothing has changed
+            
+            p = (PersonnelUni1To1FK) dao.findPerson(PersonnelUni1To1FK.class, "unionetoonefk_1");
             p.setPersonName("Saurabh");
             p.getAddress().setStreet("Brand New Street");
             dao.merge(p);

@@ -58,7 +58,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         if (RUN_IN_EMBEDDED_MODE)
         {
             CassandraCli.cassandraSetUp();
-            
+
         }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
@@ -226,7 +226,7 @@ public class MTMUniAssociationTest extends TwinAssociation
                 "unimanytomany_1");
         Assert.assertNull(person1AfterRemoval);
 
-        dao.remove("unimanytomany_2",PersonnelUniMToM.class);
+        dao.remove("unimanytomany_2", PersonnelUniMToM.class);
         PersonnelUniMToM person2AfterRemoval = (PersonnelUniMToM) dao.findPerson(PersonnelUniMToM.class,
                 "unimanytomany_2");
         Assert.assertNull(person2AfterRemoval);

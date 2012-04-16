@@ -17,26 +17,37 @@ package com.impetus.kundera.examples.twitter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
-import com.impetus.kundera.examples.twitter.query.CassandraQuerySuite;
+import com.impetus.kundera.examples.cli.CassandraCli;
 
 /**
  * Test case for Cassandra.
  * 
  * @author amresh.singh
  */
-public class TwissandraTest extends CassandraQuerySuite
+public class TwissandraTest extends TwitterTestBase
 {
 
     /** The Constant LOG. */
-    private static final Log LOG = LogFactory.getLog(TwissandraTest.class);
-
-
-    @Override
-    protected void setUp() throws Exception
+    private static final Log LOG = LogFactory.getLog(TwissandraTest.class);    
+    
+    @BeforeClass
+    public static void init() throws Exception
     {
-       
-        setUpInternal("twissandra");
+        //Start Cassandra Server
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            CassandraCli.cassandraSetUp();
+        }          
+    }
+    
+    @Before
+    protected void setUp() throws Exception
+    {       
+        setUpInternal("secIdxCassandra");       
     }
 
     /**
@@ -44,22 +55,34 @@ public class TwissandraTest extends CassandraQuerySuite
      */
     public void testOnExecute() throws Exception
     {
-       executeTestSuite();
+       executeTestSuite();       
     }
 
-    /**
-     * Test on execute query.
-     */
     
-   /*public void testOnQuery()
-    {
-        executeQuerySuite();
-    }*/
     
 
-    @Override
+    @After
     protected void tearDown() throws Exception
     {
-        tearDownInternal();
-    } 
+        tearDownInternal();        
+    }     
+    
+    
+    @Override
+    void createSchema()
+    {        
+        
+    }
+
+    @Override
+    void deleteSchema() 
+    {
+       /* LOG.warn("Truncating Column families and finally dropping Keyspace KunderaExamples in Cassandra....");
+        CassandraCli.dropColumnFamily("USER", "KunderaExamples");
+        CassandraCli.dropColumnFamily("PREFERENCE", "KunderaExamples");
+        CassandraCli.dropColumnFamily("EXTERNAL_LINKS", "KunderaExamples");
+        CassandraCli.dropKeySpace("KunderaExamples");*/
+    }
+    
+    
 }

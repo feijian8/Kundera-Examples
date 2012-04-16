@@ -16,14 +16,13 @@
 package com.impetus.kundera.examples.twitter;
 
 import com.impetus.kundera.examples.twitter.dao.Twitter;
-import com.impetus.kundera.examples.twitter.query.HBaseQuerySuite;
 
 /**
  * Test case for Twitter like application on HBase
  * 
  * @author amresh.singh
  */
-public class TwibaseTest extends HBaseQuerySuite
+public class TwibaseTest extends TwitterTestBase
 {
     /** The user id1. */
     String userId1;
@@ -53,19 +52,21 @@ public class TwibaseTest extends HBaseQuerySuite
         executeTestSuite();
     }
 
-    public void testOnQuery()
-    {
-        executeQuerySuite();
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#tearDown()
-     */
     @Override
     protected void tearDown() throws Exception
     {
         tearDownInternal();
+    }   
+
+    @Override
+    void createSchema()
+    {
     }
+
+    @Override
+    void deleteSchema()
+    {
+    }   
+    
 }

@@ -16,14 +16,13 @@
 package com.impetus.kundera.examples.twitter;
 
 import com.impetus.kundera.examples.twitter.dao.Twitter;
-import com.impetus.kundera.examples.twitter.query.MongoDBQuerySuite;
 
 /**
  * Test case for MongoDB.
  * 
  * @author amresh.singh
  */
-public class TwingoTest extends MongoDBQuerySuite
+public class TwingoTest extends TwitterTestBase
 {
 
     /** The user id1. */
@@ -54,20 +53,24 @@ public class TwingoTest extends MongoDBQuerySuite
         executeTestSuite();
     }
 
-    public void testOnQuery()
-    {
-        executeQuerySuite();
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#tearDown()
-     */
     @Override
     protected void tearDown() throws Exception
     {
         tearDownInternal();
+    }   
+    
+
+    @Override
+    void createSchema()
+    {
+        //No need to create schema, it will be created automatically
     }
+
+    @Override
+    void deleteSchema()
+    {
+    } 
+    
 
 }

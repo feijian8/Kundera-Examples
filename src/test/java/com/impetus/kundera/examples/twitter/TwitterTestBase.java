@@ -32,9 +32,11 @@ import com.impetus.kundera.examples.twitter.entities.User;
  * 
  * @author amresh.singh
  */
-public class TwitterTestSuite extends TestCase
+public abstract class TwitterTestBase extends TestCase
 {
-
+    public static final boolean RUN_IN_EMBEDDED_MODE = false;    
+    public static final boolean AUTO_MANAGE_SCHEMA = false;  
+    
     /** The user id1. */
     String userId1;
 
@@ -59,6 +61,10 @@ public class TwitterTestSuite extends TestCase
 
         twitter = new TwitterService(persistenceUnitName);
 
+        //Create Schema
+        if(AUTO_MANAGE_SCHEMA) {
+            createSchema();
+        }
     }
 
     /*
@@ -78,6 +84,10 @@ public class TwitterTestSuite extends TestCase
         {
             twitter.close();
         }
+        
+        if(AUTO_MANAGE_SCHEMA) {
+            deleteSchema();
+        }
     }
 
     /**
@@ -90,10 +100,10 @@ public class TwitterTestSuite extends TestCase
          * user1FollowsUser2(); getAllTweets();
          */
 
-         //addAllUserInfo();
+         addAllUserInfo();
          //getUserById();
         //mergeUser();
-        removeUser();
+        //removeUser();
         // getAllUsers();
         // getAllTweets();
     }
@@ -323,4 +333,38 @@ public class TwitterTestSuite extends TestCase
         user1.addTweet(new Tweet("Second Tweet from me", "Mobile"));
         return user1;
     }
+    
+    /**
+     * Gets the tweets by body.
+     * 
+     * @return the tweets by body
+     */
+    public void getTweetsByBody()
+    {
+        List<Tweet> user1Tweet = twitter.findTweetByBody("Here");
+//        List<Tweet> user2Tweet = twitter.findTweetByBody("Saurabh");
+        assertNotNull(user1Tweet);
+//        assertNotNull(user2Tweet);
+        assertEquals(1, user1Tweet.size());
+//        assertEquals(1, user2Tweet.size());
+    }
+
+    /**
+     * Gets the tweet by device.
+     * 
+     * @return the tweet by device
+     */
+    public void getTweetsByDevice()
+    {
+        List<Tweet> webTweets = twitter.findTweetByDevice("Web");
+        List<Tweet> mobileTweets = twitter.findTweetByDevice("Mobile");
+        assertNotNull(webTweets);
+        assertNotNull(mobileTweets);
+        assertEquals(1, webTweets.size());
+        assertEquals(1, mobileTweets.size());
+
+    }
+    
+    abstract void deleteSchema();
+    abstract void createSchema();
 }

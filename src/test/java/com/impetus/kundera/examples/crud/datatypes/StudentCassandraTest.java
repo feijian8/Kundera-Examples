@@ -3,6 +3,7 @@
  */
 package com.impetus.kundera.examples.crud.datatypes;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,8 @@ import com.impetus.kundera.examples.crud.datatype.entities.StudentEntityDef;
  */
 public class StudentCassandraTest extends StudentBase<StudentCassandra>
 {
+    String persistenceUnit = "secIdxCassandra";
+    
 
     /**
      * Sets the up.
@@ -72,10 +75,8 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
      */
     @Before
     public void setUp() throws Exception
-    {
-        CassandraCli.cassandraSetUp();
-        loadData();
-        setupInternal("secIdxCassandra");
+    {        
+        setupInternal(persistenceUnit);
     }
 
     /**
@@ -87,8 +88,14 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
     @After
     public void tearDown() throws Exception
     {
-        CassandraCli.dropKeySpace("KunderaExamples");
-        // dao.close();
+        teardownInternal(persistenceUnit);        
+    }
+    
+    @SuppressWarnings("deprecation")
+    @Test
+    public void executeTests() {
+        onInsert();
+        onMerge();
     }
 
     /**
@@ -101,8 +108,7 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
      *             {@link com.impetus.kundera.examples.student.StudentDao#saveStudent(com.impetus.kundera.examples.crud.datatype.entities.StudentCassandra)}
      *             .
      */
-    @SuppressWarnings("deprecation")
-    @Test
+    
     public void onInsert() 
     {
         try
@@ -141,7 +147,6 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
     /**
      * On merge.
      */
-     @Test
     public void onMerge()
     {
          try
@@ -301,5 +306,80 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
         CassandraCli.client.set_keyspace("KunderaExamples");
 
     }
+
+    @Override
+    void startServer()
+    {
+        try
+        {
+            CassandraCli.cassandraSetUp();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvalidRequestException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnavailableException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TimedOutException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SchemaDisagreementException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    void stopServer()
+    {
+    }
+
+    @Override
+    void createSchema()
+    {
+        try
+        {
+            loadData();
+        }
+        catch (TException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvalidRequestException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnavailableException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TimedOutException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SchemaDisagreementException e)
+        {
+            e.printStackTrace();
+        } 
+    }
+
+    @Override
+    void deleteSchema()
+    {
+        CassandraCli.dropKeySpace("KunderaExamples");
+    }
+    
+    
 
 }

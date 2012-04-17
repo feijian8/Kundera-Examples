@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "STUDENT", schema = "hibernatepoc")
+@Table(name = "STUDENT", schema = "KunderaExamples")
 public class StudentRdbms implements StudentEntityDef
 {
     // Primitive Types

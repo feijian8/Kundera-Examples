@@ -25,6 +25,7 @@ import com.impetus.kundera.examples.crud.datatype.entities.StudentHbase;
  */
 public class StudentHbaseTest extends StudentBase<StudentHbase>
 {
+    String persistenceUnit = "twihbase";
 
     /**
      * Sets the up.
@@ -35,12 +36,7 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
     @Before
     public void setUp() throws Exception
     {
-
-        HBaseCli.startCluster();
-        HBaseCli.createTable("KunderaExamples");
-        HBaseCli.addColumnFamily("KunderaExamples", "STUDENT");
-
-        setupInternal("twihbase");
+        setupInternal(persistenceUnit);
     }
 
     /**
@@ -51,10 +47,15 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
      */
     @After
     public void tearDown() throws Exception
-    {
-        HBaseCli.stopCluster();
-
-        // dao.close();
+    {        
+       teardownInternal(persistenceUnit); 
+    }
+    
+    @SuppressWarnings("deprecation")
+    @Test
+    public void executeTests() {
+        onInsert();
+        onMerge();
     }
 
     /**
@@ -67,11 +68,23 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
      *             {@link com.impetus.kundera.examples.student.StudentDao#saveStudent(com.impetus.kundera.examples.crud.datatype.entities.StudentHbase)}
      *             .
      */
-    @SuppressWarnings("deprecation")
-    @Test
-    public void onInsert() throws InstantiationException, IllegalAccessException
+    
+    public void onInsert() 
     {
-        onInsert(new StudentHbase());
+        try
+        {
+            onInsert(new StudentHbase());
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
 
         // find by id.
         StudentEntityDef s = em.find(StudentHbase.class, studentId1);
@@ -99,7 +112,6 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
     /**
      * On merge.
      */
-//     @Test
     public void onMerge()
     {
         em.persist(prepareData((Long) studentId1, 78575785897L, "Amresh", true, 10, 'C', (byte) 5, (short) 8,
@@ -114,8 +126,33 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
         em.merge(s);
         // emf.close();
         Query q = em.createQuery("Select p from StudentHbase p where p.STUDENT_NAME = NewAmresh");
-        List<StudentCassandra> results = q.getResultList();
+        List<StudentHbase> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertEquals(1, results.size());
     }
+
+    @Override
+    void startServer()
+    {
+        HBaseCli.startCluster();
+    }
+
+    @Override
+    void stopServer()
+    {
+        HBaseCli.stopCluster();
+    }
+
+    @Override
+    void createSchema()
+    {
+        HBaseCli.createTable("STUDENT");
+        //HBaseCli.addColumnFamily("KunderaExamples", "STUDENT");
+    }
+
+    @Override
+    void deleteSchema()
+    {
+    }   
+    
 }

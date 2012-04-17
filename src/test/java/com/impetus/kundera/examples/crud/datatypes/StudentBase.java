@@ -22,6 +22,8 @@ import com.impetus.kundera.examples.student.StudentDao;
  */
 public abstract class StudentBase<E extends StudentEntityDef> extends BaseTest
 {
+    public static final boolean RUN_IN_EMBEDDED_MODE = true;    
+    public static final boolean AUTO_MANAGE_SCHEMA = true;  
 
     /** The emf. */
     protected EntityManagerFactory emf;
@@ -86,6 +88,15 @@ public abstract class StudentBase<E extends StudentEntityDef> extends BaseTest
     protected void setupInternal(String persisntenceUnit)
     {
         // dao = new StudentDao(persistenceUnit);
+        
+        if(RUN_IN_EMBEDDED_MODE) {
+            startServer();
+        }
+        
+        if(AUTO_MANAGE_SCHEMA) {
+            createSchema();
+        }
+        
         studentId1 = new Long(12345677);
         studentId2 = new Long(12345678);
         studentId3 = new Long(12345679);
@@ -93,6 +104,27 @@ public abstract class StudentBase<E extends StudentEntityDef> extends BaseTest
         emf = Persistence.createEntityManagerFactory(persisntenceUnit);
         em = emf.createEntityManager();
     }
+    
+    /**
+    * Sets the up internal.
+    *
+    * @param persistenceUnit the new up internal
+    */
+   protected void teardownInternal(String persistenceUnit)
+   {
+      
+       if(RUN_IN_EMBEDDED_MODE) {
+           stopServer();
+       }
+       
+       if(AUTO_MANAGE_SCHEMA) {
+           deleteSchema();
+       }       
+       
+       if(emf != null) {
+           emf.close();
+       }
+   }
 
     /**
      * on insert.
@@ -255,4 +287,10 @@ public abstract class StudentBase<E extends StudentEntityDef> extends BaseTest
         Assert.assertEquals(new Double(135434.89), s.getMonthlyFee());
 
     }
+    
+    abstract void startServer();
+    abstract void stopServer();
+    abstract void createSchema();
+    abstract void deleteSchema();
+    
 }

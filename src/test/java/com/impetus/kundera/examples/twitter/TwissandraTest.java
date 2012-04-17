@@ -15,11 +15,17 @@
  */
 package com.impetus.kundera.examples.twitter;
 
+import java.io.IOException;
+
+import org.apache.cassandra.thrift.InvalidRequestException;
+import org.apache.cassandra.thrift.SchemaDisagreementException;
+import org.apache.cassandra.thrift.TimedOutException;
+import org.apache.cassandra.thrift.UnavailableException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.thrift.TException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 
@@ -32,21 +38,13 @@ public class TwissandraTest extends TwitterTestBase
 {
 
     /** The Constant LOG. */
-    private static final Log LOG = LogFactory.getLog(TwissandraTest.class);    
+    private static final Log LOG = LogFactory.getLog(TwissandraTest.class);   
+
     
-    @BeforeClass
-    public static void init() throws Exception
-    {
-        //Start Cassandra Server
-        if (RUN_IN_EMBEDDED_MODE)
-        {
-            CassandraCli.cassandraSetUp();
-        }          
-    }
     
     @Before
     protected void setUp() throws Exception
-    {       
+    {              
         setUpInternal("secIdxCassandra");       
     }
 
@@ -56,18 +54,53 @@ public class TwissandraTest extends TwitterTestBase
     public void testOnExecute() throws Exception
     {
        executeTestSuite();       
-    }
-
-    
-    
+    }   
 
     @After
     protected void tearDown() throws Exception
     {
         tearDownInternal();        
-    }     
+    }    
     
     
+    @Override
+    void startServer()
+    {
+        try
+        {
+            CassandraCli.cassandraSetUp();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvalidRequestException e)
+        {
+            e.printStackTrace();
+        }
+        catch (UnavailableException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TimedOutException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SchemaDisagreementException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    void stopServer()
+    {
+    }
+
     @Override
     void createSchema()
     {        

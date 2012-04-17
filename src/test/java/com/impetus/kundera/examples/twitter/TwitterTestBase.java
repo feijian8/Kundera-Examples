@@ -17,6 +17,8 @@ package com.impetus.kundera.examples.twitter;
 
 import java.util.List;
 
+import org.junit.Assert;
+
 import junit.framework.TestCase;
 
 import com.impetus.kundera.examples.twitter.dao.Twitter;
@@ -58,6 +60,12 @@ public abstract class TwitterTestBase extends TestCase
     {
         userId1 = "0001";
         userId2 = "0002";
+        
+        //Start Cassandra Server
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            startServer();
+        }   
 
         twitter = new TwitterService(persistenceUnitName);
 
@@ -88,6 +96,12 @@ public abstract class TwitterTestBase extends TestCase
         if(AUTO_MANAGE_SCHEMA) {
             deleteSchema();
         }
+        
+        //Stop Server
+        if (RUN_IN_EMBEDDED_MODE)
+        {
+            stopServer();
+        } 
     }
 
     /**
@@ -95,17 +109,18 @@ public abstract class TwitterTestBase extends TestCase
      */
     protected void executeTestSuite()
     {
-        /*
-         * addUsers(); addTweets(); savePreference(); addExternalLinks();
-         * user1FollowsUser2(); getAllTweets();
-         */
-
+        //Insert, Find and Update
          addAllUserInfo();
-         //getUserById();
-        //mergeUser();
-        //removeUser();
-        // getAllUsers();
-        // getAllTweets();
+         getUserById();
+         updateUser();
+         
+         //Queries
+         getAllUsers();
+         getAllTweets();
+         
+         //Remove Users
+         removeUser();          
+
     }
 
     protected void addAllUserInfo()
@@ -126,32 +141,41 @@ public abstract class TwitterTestBase extends TestCase
     {
         twitter.createEntityManager();
         User user1 = twitter.findUserById(userId1);
-        System.out.println(user1);
+        assertUser1(user1);
+               
         User user2 = twitter.findUserById(userId2);
+        assertUser2(user2);
+        
+    }   
+    
+    protected void updateUser() {
+        twitter.createEntityManager();
+        User user1 = twitter.findUserById(userId1);       
+        assertUser1(user1);
+        
+        user1.setPersonalDetail(new PersonalDetail("Vivek", "unknown", "Married"));
+        user1.addTweet(new Tweet("My Third Tweet", "iPhone"));
+        twitter.mergeUser(user1);
+        
+        User user1AfterMerge = twitter.findUserById(userId1);
+        
+        assertUpdatedUser1(user1AfterMerge);
+        
         twitter.closeEntityManager();
-        System.out.println(user2);
     }
     
     protected void removeUser() {
         twitter.createEntityManager();
-        User user1 = twitter.findUserById(userId1);
-        
+        User user1 = twitter.findUserById(userId1);       
+        assertUpdatedUser1(user1);
         
         twitter.removeUser(user1);
-        twitter.closeEntityManager();
-        System.out.println("Removed");
-    }
-    
-    protected void mergeUser() {
-        twitter.createEntityManager();
-        User user1 = twitter.findUserById(userId1);
+        
+        User user1AfterRemoval = twitter.findUserById(userId1);
+        Assert.assertNull(user1AfterRemoval);
+        
         twitter.closeEntityManager();
         
-        //EM is closed now, so all entities should be in detached state
-        twitter.createEntityManager();
-        user1.setPersonalDetail(new PersonalDetail("Vivek2", "sdgfsdfsdfd", "Married"));
-        twitter.mergeUser(user1);
-        twitter.closeEntityManager();
     }
     
     
@@ -160,7 +184,18 @@ public abstract class TwitterTestBase extends TestCase
     {
         twitter.createEntityManager();
         List<User> users = twitter.getAllUsers();
-        System.out.println(users);
+        Assert.assertNotNull(users);
+        Assert.assertFalse(users.isEmpty());
+        Assert.assertEquals(2, users.size());
+        
+        for(User u : users) {
+            Assert.assertNotNull(u);
+            if(u.getUserId().equals(userId1)) {
+                assertUpdatedUser1(u);
+            } else if(u.getUserId().equals(userId2)) {
+                assertUser2(u);
+            }
+        }
         twitter.closeEntityManager();
     }
 
@@ -264,11 +299,10 @@ public abstract class TwitterTestBase extends TestCase
     protected void getAllTweets()
     {
         twitter.createEntityManager();
-        List<Tweet> tweetsUser1 = twitter.getAllTweets(userId1);
-        twitter.closeEntityManager();
         
-        twitter.createEntityManager();
+        List<Tweet> tweetsUser1 = twitter.getAllTweets(userId1);        
         List<Tweet> tweetsUser2 = twitter.getAllTweets(userId2);
+        
         twitter.closeEntityManager();
 
         assertNotNull(tweetsUser1);
@@ -277,8 +311,47 @@ public abstract class TwitterTestBase extends TestCase
         assertFalse(tweetsUser1.isEmpty());
         assertFalse(tweetsUser2.isEmpty());
 
-        assertEquals(2, tweetsUser1.size());
+        assertEquals(3, tweetsUser1.size());
         assertEquals(2, tweetsUser2.size());
+    }
+    
+    /**
+     * Gets the tweets by body.
+     * 
+     * @return the tweets by body
+     */
+    public void getTweetsByBody()
+    {
+        twitter.createEntityManager();
+        List<Tweet> user1Tweet = twitter.findTweetByBody("Here");
+        List<Tweet> user2Tweet = twitter.findTweetByBody("Saurabh");
+        
+        twitter.closeEntityManager();
+        
+        assertNotNull(user1Tweet);
+        assertNotNull(user2Tweet);
+        assertEquals(1, user1Tweet.size());
+        assertEquals(1, user2Tweet.size());
+    }
+
+    /**
+     * Gets the tweet by device.
+     * 
+     * @return the tweet by device
+     */
+    public void getTweetsByDevice()
+    {
+        twitter.createEntityManager();
+        List<Tweet> webTweets = twitter.findTweetByDevice("Web");
+        List<Tweet> mobileTweets = twitter.findTweetByDevice("Mobile");
+        
+        twitter.closeEntityManager();
+        
+        assertNotNull(webTweets);
+        assertNotNull(mobileTweets);
+        assertEquals(1, webTweets.size());
+        assertEquals(1, mobileTweets.size());
+
     }
 
     /**
@@ -299,6 +372,23 @@ public abstract class TwitterTestBase extends TestCase
         assertNull(follower1);
         assertNotNull(follower2);
     }
+    
+    /**
+     * @return
+     */
+    private User buildUser1()
+    {
+        User user1 = new User(userId1, "Amresh", "password1", "married");
+
+        user1.setPreference(new Preference("P1", "Motif", "2"));
+
+        user1.addExternalLink(new ExternalLink("L1", "Facebook", "http://facebook.com/coolnerd"));
+        user1.addExternalLink(new ExternalLink("L2", "LinkedIn", "http://linkedin.com/in/devilmate"));
+
+        user1.addTweet(new Tweet("Here is my first tweet", "Web"));
+        user1.addTweet(new Tweet("Second Tweet from me", "Mobile"));
+        return user1;
+    }
 
     /**
      * @return
@@ -316,54 +406,55 @@ public abstract class TwitterTestBase extends TestCase
         user2.addTweet(new Tweet("Another tweet from Saurabh", "text"));
         return user2;
     }
-
-    /**
-     * @return
-     */
-    private User buildUser1()
-    {
-        User user1 = new User(userId1, "Amresh", "password1", "married");
-
-        user1.setPreference(new Preference("P1", "Motif", "2"));
-
-        user1.addExternalLink(new ExternalLink("L1", "Facebook", "http://facebook.com/coolnerd"));
-        user1.addExternalLink(new ExternalLink("L2", "LinkedIn", "http://linkedin.com/in/devilmate"));
-
-        user1.addTweet(new Tweet("Here is my first tweet", "Web"));
-        user1.addTweet(new Tweet("Second Tweet from me", "Mobile"));
-        return user1;
+    
+    private void assertUser1(User user1) {
+        Assert.assertNotNull(user1);
+        Assert.assertEquals(userId1, user1.getUserId());
+        Assert.assertNotNull(user1.getPersonalDetail());
+        Assert.assertEquals("Amresh", user1.getPersonalDetail().getName());
+        Assert.assertNotNull(user1.getPreference());
+        Assert.assertEquals("2", user1.getPreference().getPrivacyLevel());
+        Assert.assertNotNull(user1.getTweets());
+        Assert.assertFalse(user1.getTweets().isEmpty());
+        Assert.assertEquals(2, user1.getTweets().size());
+        Assert.assertNotNull(user1.getExternalLinks());
+        Assert.assertFalse(user1.getExternalLinks().isEmpty());
+        Assert.assertEquals(2, user1.getExternalLinks().size());
+    }
+   
+    private void assertUser2(User user2) {
+        Assert.assertNotNull(user2);
+        Assert.assertEquals(userId2, user2.getUserId());
+        Assert.assertNotNull(user2.getPersonalDetail());
+        Assert.assertEquals("Saurabh", user2.getPersonalDetail().getName());
+        Assert.assertNotNull(user2.getPreference());
+        Assert.assertEquals("3", user2.getPreference().getPrivacyLevel());
+        Assert.assertNotNull(user2.getTweets());
+        Assert.assertFalse(user2.getTweets().isEmpty());
+        Assert.assertEquals(2, user2.getTweets().size());
+        Assert.assertNotNull(user2.getExternalLinks());
+        Assert.assertFalse(user2.getExternalLinks().isEmpty());
+        Assert.assertEquals(2, user2.getExternalLinks().size());
     }
     
-    /**
-     * Gets the tweets by body.
-     * 
-     * @return the tweets by body
-     */
-    public void getTweetsByBody()
-    {
-        List<Tweet> user1Tweet = twitter.findTweetByBody("Here");
-//        List<Tweet> user2Tweet = twitter.findTweetByBody("Saurabh");
-        assertNotNull(user1Tweet);
-//        assertNotNull(user2Tweet);
-        assertEquals(1, user1Tweet.size());
-//        assertEquals(1, user2Tweet.size());
-    }
-
-    /**
-     * Gets the tweet by device.
-     * 
-     * @return the tweet by device
-     */
-    public void getTweetsByDevice()
-    {
-        List<Tweet> webTweets = twitter.findTweetByDevice("Web");
-        List<Tweet> mobileTweets = twitter.findTweetByDevice("Mobile");
-        assertNotNull(webTweets);
-        assertNotNull(mobileTweets);
-        assertEquals(1, webTweets.size());
-        assertEquals(1, mobileTweets.size());
-
-    }
+    private void assertUpdatedUser1(User user1) {
+        Assert.assertNotNull(user1);
+        Assert.assertEquals(userId1, user1.getUserId());
+        Assert.assertNotNull(user1.getPersonalDetail());
+        Assert.assertEquals("Vivek", user1.getPersonalDetail().getName());
+        Assert.assertEquals("unknown", user1.getPersonalDetail().getPassword());
+        Assert.assertNotNull(user1.getPreference());
+        Assert.assertEquals("2", user1.getPreference().getPrivacyLevel());
+        Assert.assertNotNull(user1.getTweets());
+        Assert.assertFalse(user1.getTweets().isEmpty());
+        Assert.assertEquals(3, user1.getTweets().size());
+        Assert.assertNotNull(user1.getExternalLinks());
+        Assert.assertFalse(user1.getExternalLinks().isEmpty());
+        Assert.assertEquals(2, user1.getExternalLinks().size());
+    }    
+    
+    abstract void startServer();
+    abstract void stopServer();
     
     abstract void deleteSchema();
     abstract void createSchema();

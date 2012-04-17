@@ -15,7 +15,8 @@
  */
 package com.impetus.kundera.examples.twitter;
 
-import com.impetus.kundera.examples.twitter.dao.Twitter;
+import com.impetus.kundera.examples.cli.HBaseCli;
+
 
 /**
  * Test case for Twitter like application on HBase
@@ -23,25 +24,12 @@ import com.impetus.kundera.examples.twitter.dao.Twitter;
  * @author amresh.singh
  */
 public class TwibaseTest extends TwitterTestBase
-{
-    /** The user id1. */
-    String userId1;
+{  
 
-    /** The user id2. */
-    String userId2;
-
-    /** The twitter. */
-    Twitter twitter;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
     @Override
     protected void setUp() throws Exception
     {
-        setUpInternal("twibase");
+        setUpInternal("twihbase");
     }
 
     /**
@@ -57,16 +45,44 @@ public class TwibaseTest extends TwitterTestBase
     protected void tearDown() throws Exception
     {
         tearDownInternal();
-    }   
+    } 
+    
+    @Override
+    void startServer()
+    {
+        if (!HBaseCli.isStarted())
+        {            
+            HBaseCli.startCluster();           
+        }
+    }
+
+    @Override
+    void stopServer()
+    {
+        if (HBaseCli.isStarted())
+        {            
+            HBaseCli.stopCluster();           
+        }
+    }    
+    
 
     @Override
     void createSchema()
     {
+        /*if(AUTO_MANAGE_SCHEMA) {
+            String tableName = "USER";
+            HBaseCli.createTable(tableName);
+            HBaseCli.addColumnFamily(tableName, "ADDRESS");
+            HBaseCli.addColumnFamily(tableName, "PERSONNEL");
+        }*/
+        
     }
 
     @Override
     void deleteSchema()
     {
-    }   
+    }
+
+    
     
 }

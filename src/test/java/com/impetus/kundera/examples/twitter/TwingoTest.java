@@ -58,8 +58,7 @@ public class TwingoTest extends TwitterTestBase
     protected void tearDown() throws Exception
     {
         tearDownInternal();
-    }   
-    
+    }       
 
     @Override
     void createSchema()
@@ -68,9 +67,20 @@ public class TwingoTest extends TwitterTestBase
     }
 
     @Override
+    void startServer()
+    {
+        //Currently no embedded server
+    }
+
+    @Override
+    void stopServer()
+    {
+        //Currently no embedded server
+    }
+
+    @Override
     void deleteSchema()
     {
-    } 
-    
+    }     
 
 }

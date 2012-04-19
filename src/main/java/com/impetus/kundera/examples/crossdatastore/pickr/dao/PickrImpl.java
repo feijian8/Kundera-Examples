@@ -31,6 +31,7 @@ public class PickrImpl implements Pickr
 {
 
     EntityManagerFactory emf;
+    EntityManager em;
 
     public PickrImpl(String persistenceUnitName)
     {
@@ -44,15 +45,15 @@ public class PickrImpl implements Pickr
     public void addPhotographer(Object p)
     {
 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         em.persist(p);
-        em.close();
+        closeEntityManager();
     }
 
     @Override
     public Object getPhotographer(Class<?> entityClass, String photographerId)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         Object p = em.find(entityClass, photographerId);
         return p;
     }
@@ -60,27 +61,41 @@ public class PickrImpl implements Pickr
     @Override
     public List<Object> getAllPhotographers(String className)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         Query q = em.createQuery("select p from " + className + " p");
         List<Object> photographers = q.getResultList();
-        em.close();
+//        closeEntityManager();
         return photographers;
     }
 
     @Override
     public void deletePhotographer(Object p)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         em.remove(p);
-        em.close();
+        closeEntityManager();
     }
 
     @Override
     public void mergePhotographer(Object p)
     {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         em.merge(p);
-        em.close();
+        closeEntityManager();
+    }
+    
+    EntityManager getEntityManager() {
+        if(em == null) {
+            em = emf.createEntityManager();
+        }
+        return em;
+    }
+    
+    void closeEntityManager() {
+        if (em != null) {
+            em.close();
+            em = null;
+        }
     }
 
     @Override

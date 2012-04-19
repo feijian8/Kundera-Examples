@@ -42,7 +42,7 @@ public class PhotographerUni_1_1_1_1
     @Column(name = "PHOTOGRAPHER_NAME")
     private String photographerName;
 
-    // One to many, will be persisted separately
+    // One to one, will be persisted separately
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="ALBUM_ID")
     private AlbumUni_1_1_1_1 album;     

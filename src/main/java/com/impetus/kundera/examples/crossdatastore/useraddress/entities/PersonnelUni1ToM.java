@@ -14,52 +14,46 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "PERSONNEL", schema = "KunderaExamples@twissandra")
-public class PersonnelUni1ToM {
-	@Id
-	@Column(name = "PERSON_ID")
-	private String personId;
+public class PersonnelUni1ToM
+{
+    @Id
+    @Column(name = "PERSON_ID")
+    private String personId;
 
-	@Column(name = "PERSON_NAME")
-	private String personName;
-	
-	@Embedded
-	PersonalData personalData;
+    @Column(name = "PERSON_NAME")
+    private String personName;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="PERSON_ID")
-	private Set<HabitatUni1ToM> addresses;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERSON_ID")
+    private Set<HabitatUni1ToM> addresses;
 
-	public String getPersonId() {
-		return personId;
-	}
+    public String getPersonId()
+    {
+        return personId;
+    }
 
-	public String getPersonName() {
-		return personName;
-	}
+    public String getPersonName()
+    {
+        return personName;
+    }
 
-	public void setPersonName(String personName) {
-		this.personName = personName;
-	}
+    public void setPersonName(String personName)
+    {
+        this.personName = personName;
+    }
 
-	public void setPersonId(String personId) {
-		this.personId = personId;
-	}
+    public void setPersonId(String personId)
+    {
+        this.personId = personId;
+    }
 
-	public PersonalData getPersonalData() {
-		return personalData;
-	}
+    public Set<HabitatUni1ToM> getAddresses()
+    {
+        return addresses;
+    }
 
-	public void setPersonalData(PersonalData personalData) {
-		this.personalData = personalData;
-	}
-
-	public Set<HabitatUni1ToM> getAddresses() {
-		return addresses;
-	}
-
-	public void setAddresses(Set<HabitatUni1ToM> addresses) {
-		this.addresses = addresses;
-	}
+    public void setAddresses(Set<HabitatUni1ToM> addresses)
+    {
+        this.addresses = addresses;
+    }
 }
-
-	

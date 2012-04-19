@@ -35,7 +35,7 @@ import com.impetus.kundera.examples.crossdatastore.pickr.entities.photographer.P
  * 
  */
 @Entity
-@Table(name = "ALBUM", schema = "Pickr")
+@Table(name = "ALBUM", schema = "Pickr@piccandra")
 public class AlbumBi_M_M_1_1
 {
     @Id
@@ -53,7 +53,7 @@ public class AlbumBi_M_M_1_1
     @JoinColumn(name = "PHOTO_ID")
     private PhotoBi_M_M_1_1 photo;
     
-    @ManyToMany(mappedBy = "albums", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "albums", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PhotographerBi_M_M_1_1> photographers;
 
     public AlbumBi_M_M_1_1()

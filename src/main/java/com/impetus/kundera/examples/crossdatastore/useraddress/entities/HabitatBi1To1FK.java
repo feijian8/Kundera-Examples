@@ -6,32 +6,31 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="ADDRESS", schema="KunderaExamples@twissandra")
+@Table(name = "ADDRESS", schema = "KunderaExamples@twissandra")
 public class HabitatBi1To1FK
 {
-    @Id    
+    @Id
     @Column(name = "ADDRESS_ID")
-    private String addressId;   
-   
+    private String addressId;
 
     @Column(name = "STREET")
-    private String street; 
-    
-    @OneToOne(mappedBy="address")
-    private PersonnelBi1To1FK person;   
-    	
+    private String street;
 
-	public String getAddressId() {
-		return addressId;
-	}
+    @OneToOne(mappedBy = "address")
+    private PersonnelBi1To1FK person;
 
-	public void setAddressId(String addressId) {
-		this.addressId = addressId;
-	}
+    public String getAddressId()
+    {
+        return addressId;
+    }
 
-	public String getStreet()
+    public void setAddressId(String addressId)
+    {
+        this.addressId = addressId;
+    }
+
+    public String getStreet()
     {
         return street;
     }
@@ -41,13 +40,14 @@ public class HabitatBi1To1FK
         this.street = street;
     }
 
-	public PersonnelBi1To1FK getPerson() {
-		return person;
-	}
+    public PersonnelBi1To1FK getPerson()
+    {
+        return person;
+    }
 
-	public void setPerson(PersonnelBi1To1FK person) {
-		this.person = person;
-	}  
-    
+    public void setPerson(PersonnelBi1To1FK person)
+    {
+        this.person = person;
+    }
 
 }

@@ -2,7 +2,6 @@ package com.impetus.kundera.examples.crossdatastore.useraddress.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -11,28 +10,24 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PERSONNEL", schema="hibernatepoc")
+@Table(name = "PERSONNEL", schema = "hibernatepoc")
 public class PersonnelBi1To1PK
 {
-    @Id   
-    @Column(name="PERSON_ID")    
+    @Id
+    @Column(name = "PERSON_ID")
     private String personId;
-    
-    @Column(name="PERSON_NAME")
+
+    @Column(name = "PERSON_NAME")
     private String personName;
-    
-    @Embedded
-    PersonalData personalData;
-    
-    @OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY, optional=false) 
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @PrimaryKeyJoinColumn
     private HabitatBi1To1PK address;
 
     public String getPersonId()
     {
         return personId;
-    }   
-    
+    }
 
     public String getPersonName()
     {
@@ -42,30 +37,20 @@ public class PersonnelBi1To1PK
     public void setPersonName(String personName)
     {
         this.personName = personName;
-    }  
+    }
 
-
-	public void setPersonId(String personId)
+    public void setPersonId(String personId)
     {
         this.personId = personId;
     }
 
-	public PersonalData getPersonalData() {
-		return personalData;
-	}
+    public HabitatBi1To1PK getAddress()
+    {
+        return address;
+    }
 
-
-	public void setPersonalData(PersonalData personalData) {
-		this.personalData = personalData;
-	}
-
-
-	public HabitatBi1To1PK getAddress() {
-		return address;
-	}
-
-
-	public void setAddress(HabitatBi1To1PK address) {
-		this.address = address;
-	}	
+    public void setAddress(HabitatBi1To1PK address)
+    {
+        this.address = address;
+    }
 }

@@ -39,10 +39,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUni1To1FK;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUni1ToM;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUni1To1FK;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUni1ToM;
 
 /**
@@ -60,6 +57,10 @@ public class OTMUniAssociationTest extends TwinAssociation
         if (RUN_IN_EMBEDDED_MODE)
         {
             CassandraCli.cassandraSetUp();
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }          
         }
 
         List<Class> clazzz = new ArrayList<Class>(2);
@@ -95,8 +96,7 @@ public class OTMUniAssociationTest extends TwinAssociation
         // Save Person
         PersonnelUni1ToM personnel = new PersonnelUni1ToM();
         personnel.setPersonId("unionetomany_1");
-        personnel.setPersonName("Amresh");
-        personnel.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+        personnel.setPersonName("Amresh");        
 
         Set<HabitatUni1ToM> addresses = new HashSet<HabitatUni1ToM>();
         HabitatUni1ToM address1 = new HabitatUni1ToM();
@@ -124,11 +124,8 @@ public class OTMUniAssociationTest extends TwinAssociation
         PersonnelUni1ToM p = (PersonnelUni1ToM) dao.findPerson(PersonnelUni1ToM.class, "unionetomany_1");
         Assert.assertNotNull(p);
         Assert.assertEquals("unionetomany_1", p.getPersonId());
-        Assert.assertEquals("Amresh", p.getPersonName());
-        PersonalData pd = p.getPersonalData();
-        Assert.assertNotNull(pd);
-        Assert.assertEquals("www.amresh.com", pd.getWebsite());
-
+        Assert.assertEquals("Amresh", p.getPersonName());        
+        
         Set<HabitatUni1ToM> adds = p.getAddresses();
         Assert.assertNotNull(adds);
         Assert.assertFalse(adds.isEmpty());
@@ -217,7 +214,7 @@ public class OTMUniAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
         ColumnDef columnDef = new ColumnDef(ByteBuffer.wrap("PERSON_NAME".getBytes()), "UTF8Type");

@@ -9,32 +9,34 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.impetus.kundera.annotations.Index;
 
 @Entity
-@Table(name="ADDRESS", schema="KunderaExamples@secIdxCassandra")
+@Index(index=true, columns={"STREET"})
+@Table(name = "ADDRESS", schema = "KunderaExamples@twissandra")
 public class HabitatBiMTo1
 {
-    @Id    
+    @Id
     @Column(name = "ADDRESS_ID")
-    private String addressId;   
-   
+    private String addressId;
 
     @Column(name = "STREET")
-    private String street; 
-    
-    @OneToMany(mappedBy="address", fetch = FetchType.LAZY)    
-    private Set<PersonnelBiMTo1> people;   
-    	
+    private String street;
 
-	public String getAddressId() {
-		return addressId;
-	}
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    private Set<PersonnelBiMTo1> people;
 
-	public void setAddressId(String addressId) {
-		this.addressId = addressId;
-	}
+    public String getAddressId()
+    {
+        return addressId;
+    }
 
-	public String getStreet()
+    public void setAddressId(String addressId)
+    {
+        this.addressId = addressId;
+    }
+
+    public String getStreet()
     {
         return street;
     }
@@ -44,13 +46,14 @@ public class HabitatBiMTo1
         this.street = street;
     }
 
-	public Set<PersonnelBiMTo1> getPeople() {
-		return people;
-	}
+    public Set<PersonnelBiMTo1> getPeople()
+    {
+        return people;
+    }
 
-	public void setPeople(Set<PersonnelBiMTo1> people) {
-		this.people = people;
-	} 
-    
+    public void setPeople(Set<PersonnelBiMTo1> people)
+    {
+        this.people = people;
+    }
 
 }

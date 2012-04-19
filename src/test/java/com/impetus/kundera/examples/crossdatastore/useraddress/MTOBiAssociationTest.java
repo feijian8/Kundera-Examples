@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatBiMTo1;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelBiMTo1;
 
 public class MTOBiAssociationTest extends TwinAssociation
@@ -40,6 +39,10 @@ public class MTOBiAssociationTest extends TwinAssociation
         if (RUN_IN_EMBEDDED_MODE)
         {
             CassandraCli.cassandraSetUp();
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }
         }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelBiMTo1.class);
@@ -66,61 +69,18 @@ public class MTOBiAssociationTest extends TwinAssociation
     public void testCRUD()
     {
         tryOperation();
-    }
-
-    @Override
-    protected void find()
-    {
-        // Find Person 1
-        PersonnelBiMTo1 p1 = (PersonnelBiMTo1) dao.findPerson(PersonnelBiMTo1.class, "bimanytoone_1");
-        Assert.assertNotNull(p1);
-        Assert.assertEquals("bimanytoone_1", p1.getPersonId());
-        Assert.assertEquals("Amresh", p1.getPersonName());
-        PersonalData pd = p1.getPersonalData();
-        Assert.assertNotNull(pd);
-        Assert.assertEquals("www.amresh.com", pd.getWebsite());
-
-        HabitatBiMTo1 add = p1.getAddress();
-        Assert.assertNotNull(add);
-
-        Assert.assertEquals("bimanytoone_b", add.getAddressId());
-        Set<PersonnelBiMTo1> people = add.getPeople();
-        Assert.assertNotNull(people);
-        Assert.assertFalse(people.isEmpty());
-        Assert.assertEquals(2, people.size());
-
-        // Find Person 2
-        PersonnelBiMTo1 p2 = (PersonnelBiMTo1) dao.findPerson(PersonnelBiMTo1.class, "bimanytoone_2");
-        Assert.assertNotNull(p2);
-        Assert.assertEquals("bimanytoone_2", p2.getPersonId());
-        Assert.assertEquals("Vivek", p2.getPersonName());
-        PersonalData pd2 = p2.getPersonalData();
-        Assert.assertNotNull(pd2);
-        Assert.assertEquals("www.vivek.com", pd2.getWebsite());
-
-        HabitatBiMTo1 add2 = p2.getAddress();
-        Assert.assertNotNull(add2);
-
-        Assert.assertEquals("bimanytoone_b", add2.getAddressId());
-        Set<PersonnelBiMTo1> people2 = add2.getPeople();
-        Assert.assertNotNull(people2);
-        Assert.assertFalse(people2.isEmpty());
-        Assert.assertEquals(2, people2.size());
-
-    }
+    }   
 
     @Override
     protected void insert()
     {
         PersonnelBiMTo1 person1 = new PersonnelBiMTo1();
         person1.setPersonId("bimanytoone_1");
-        person1.setPersonName("Amresh");
-        person1.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+        person1.setPersonName("Amresh");        
 
         PersonnelBiMTo1 person2 = new PersonnelBiMTo1();
         person2.setPersonId("bimanytoone_2");
-        person2.setPersonName("Vivek");
-        person2.setPersonalData(new PersonalData("www.vivek.com", "vivek@gmail.com", "mevivs"));
+        person2.setPersonName("Vivek");        
 
         HabitatBiMTo1 address = new HabitatBiMTo1();
         address.setAddressId("bimanytoone_b");
@@ -137,6 +97,41 @@ public class MTOBiAssociationTest extends TwinAssociation
         col.add(person1);
         col.add(person2);
         col.add(address);
+
+    }
+    
+    @Override
+    protected void find()
+    {
+        // Find Person 1
+        PersonnelBiMTo1 p1 = (PersonnelBiMTo1) dao.findPerson(PersonnelBiMTo1.class, "bimanytoone_1");
+        Assert.assertNotNull(p1);
+        Assert.assertEquals("bimanytoone_1", p1.getPersonId());
+        Assert.assertEquals("Amresh", p1.getPersonName());        
+        
+        HabitatBiMTo1 add = p1.getAddress();
+        Assert.assertNotNull(add);
+
+        Assert.assertEquals("bimanytoone_b", add.getAddressId());
+        Set<PersonnelBiMTo1> people = add.getPeople();
+        Assert.assertNotNull(people);
+        Assert.assertFalse(people.isEmpty());
+        Assert.assertEquals(2, people.size());
+
+        // Find Person 2
+        PersonnelBiMTo1 p2 = (PersonnelBiMTo1) dao.findPerson(PersonnelBiMTo1.class, "bimanytoone_2");
+        Assert.assertNotNull(p2);
+        Assert.assertEquals("bimanytoone_2", p2.getPersonId());
+        Assert.assertEquals("Vivek", p2.getPersonName());        
+
+        HabitatBiMTo1 add2 = p2.getAddress();
+        Assert.assertNotNull(add2);
+
+        Assert.assertEquals("bimanytoone_b", add2.getAddressId());
+        Set<PersonnelBiMTo1> people2 = add2.getPeople();
+        Assert.assertNotNull(people2);
+        Assert.assertFalse(people2.isEmpty());
+        Assert.assertEquals(2, people2.size());
 
     }
 
@@ -172,15 +167,15 @@ public class MTOBiAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
         ColumnDef columnDef = new ColumnDef(ByteBuffer.wrap("PERSON_NAME".getBytes()), "UTF8Type");
-        // columnDef.index_type = IndexType.KEYS;
+        columnDef.index_type = IndexType.KEYS;
         cfDef.addToColumn_metadata(columnDef);
 
         ColumnDef columnDef1 = new ColumnDef(ByteBuffer.wrap("ADDRESS_ID".getBytes()), "IntegerType");
-        // columnDef1.index_type = IndexType.KEYS;
+        columnDef1.index_type = IndexType.KEYS;
         cfDef.addToColumn_metadata(columnDef1);
 
         List<CfDef> cfDefs = new ArrayList<CfDef>();

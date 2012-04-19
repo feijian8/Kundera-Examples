@@ -15,13 +15,9 @@
  ******************************************************************************/
 package com.impetus.kundera.examples.crossdatastore.pickr;
 
-import java.io.File;
-
-import com.impetus.kundera.PersistenceProperties;
+import com.impetus.kundera.examples.cli.TestUtilities;
 import com.impetus.kundera.examples.crossdatastore.pickr.dao.Pickr;
 import com.impetus.kundera.examples.crossdatastore.pickr.dao.PickrImpl;
-import com.impetus.kundera.metadata.model.KunderaMetadata;
-import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 
 /**
  * @author amresh.singh
@@ -31,7 +27,7 @@ public abstract class PickrBaseTest
 {
     Pickr pickr;
     int photographerId;
-    String pu = "picmysql";
+    String pu = "picmysql,piccandra,picongo";
     
     protected void setUp() throws Exception
     {
@@ -39,47 +35,29 @@ public abstract class PickrBaseTest
         pickr = new PickrImpl(pu);
     }
 
-    public void test()
-    {       
-               
+    public void executeTests()
+    {      
+
+        addPhotographer();        
+        getPhotographer();
+        updatePhotographer();
+        getAllPhotographers();
+        deletePhotographer();
     }
     
     protected void tearDown() throws Exception
     {
         pickr.close();
-        cleanLuceneDirectory();
+        
+        TestUtilities.cleanLuceneDirectory(pu);        
     }
     
     protected abstract void addPhotographer();
     protected abstract void updatePhotographer();
     protected abstract void getPhotographer();
     protected abstract void getAllPhotographers();
-    protected abstract void deletePhotographer();
+    protected abstract void deletePhotographer();    
     
     
-    private void cleanLuceneDirectory() {
-        PersistenceUnitMetadata puMetadata = KunderaMetadata.INSTANCE.getApplicationMetadata().getPersistenceUnitMetadata(pu);
-        if(puMetadata != null ) {
-            String luceneDir = puMetadata.getProperty(PersistenceProperties.KUNDERA_INDEX_HOME_DIR);
-            if (luceneDir != null && luceneDir.length() > 0)
-            {
-                System.out.println("Cleaning up lucene folder " + luceneDir);
-                File directory = new File(luceneDir);
-                // Get all files in directory
-                File[] files = directory.listFiles();
-                for (File file : files)
-                {
-                    // Delete each file
-                    if (!file.delete())
-                    {
-                        // Failed to delete file
-                        System.out.println("Failed to delete " + file);
-                    }
-                }
-            }
-        }
-        
-        
-    }
     
 }

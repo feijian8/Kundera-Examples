@@ -17,8 +17,10 @@ package com.impetus.kundera.examples.crossdatastore.pickr.entities.album;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -34,7 +36,7 @@ import com.impetus.kundera.examples.crossdatastore.pickr.entities.photo.PhotoUni
  */
 
 @Entity
-@Table(name = "ALBUM", schema = "Pickr")
+@Table(name = "ALBUM", schema = "Pickr@piccandra")
 public class AlbumUni_M_M_M_M
 {
     @Id
@@ -47,7 +49,7 @@ public class AlbumUni_M_M_M_M
     @Column(name = "ALBUM_DESC")
     private String albumDescription;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "ALBUM_PHOTO", 
       joinColumns = {
         @JoinColumn(name="ALBUM_ID")           

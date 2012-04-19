@@ -35,6 +35,7 @@ import org.apache.thrift.TException;
 import com.impetus.kundera.PersistenceProperties;
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.cli.HBaseCli;
+import com.impetus.kundera.examples.cli.TestUtilities;
 import com.impetus.kundera.examples.crossdatastore.useraddress.dao.UserAddressDaoImpl;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.metadata.model.KunderaMetadata;
@@ -51,8 +52,8 @@ public abstract class AssociationBase
     public static final boolean RUN_IN_EMBEDDED_MODE = true;    
     public static final boolean AUTO_MANAGE_SCHEMA = true;  
     
-//    public static final String[] ALL_PUs_UNDER_TEST = new String[]{"twissandra"};
-    public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra", "twihbase","twingo"};
+    public static final String[] ALL_PUs_UNDER_TEST = new String[]{"twissandra","twihbase"};
+    //public static final String[] ALL_PUs_UNDER_TEST = new String[]{/*"rdbms",*/ "twissandra", "twihbase","twingo"};
     /** The em. */
     protected EntityManager em;
 
@@ -75,7 +76,7 @@ public abstract class AssociationBase
      */
     protected void setUpInternal(String... colFamilies)
     {
-        String persistenceUnits = "twingo,twissandra,twihbase";
+        String persistenceUnits = "twissandra,twihbase";
         // String persistenceUnits = "rdbms,twissandra";
         dao = new UserAddressDaoImpl(persistenceUnits);
         em = dao.getEntityManager(persistenceUnits);
@@ -201,23 +202,21 @@ public abstract class AssociationBase
     protected void tearDownInternal() throws InvalidRequestException, SchemaDisagreementException
     {
 
-        /*
-         * for (Object o : col) { em.remove(o);
-         * 
-         * }
-         */
-
         if (AUTO_MANAGE_SCHEMA)
         {
             truncateSchema();
         }
-
+        
+        for(String pu : ALL_PUs_UNDER_TEST) {
+            TestUtilities.cleanLuceneDirectory(pu);
+        }
+        
         dao.closeEntityManagerFactory();
 
         if (RUN_IN_EMBEDDED_MODE)
         {
             HBaseCli.stopCluster();
-        }
+        } 
 
     }
 
@@ -242,6 +241,7 @@ public abstract class AssociationBase
             TimedOutException, SchemaDisagreementException;
 
     protected abstract void loadDataForHABITAT() throws TException, InvalidRequestException, UnavailableException,
-            TimedOutException, SchemaDisagreementException;
+            TimedOutException, SchemaDisagreementException;    
+    
 
 }

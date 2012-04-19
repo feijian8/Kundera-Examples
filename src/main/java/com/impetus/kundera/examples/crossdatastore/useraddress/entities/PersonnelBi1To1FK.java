@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERSONNEL", schema = "KunderaExamples@twingo")
+@Table(name = "PERSONNEL", schema = "KunderaExamples@twissandra")
 public class PersonnelBi1To1FK {
 	@Id
 	@Column(name = "PERSON_ID")
@@ -20,9 +20,6 @@ public class PersonnelBi1To1FK {
 	@Column(name = "PERSON_NAME")
 	private String personName;
 	
-	@Embedded
-	private PersonalData personalData;
-
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="ADDRESS_ID")	
 	private HabitatBi1To1FK address;
@@ -41,14 +38,6 @@ public class PersonnelBi1To1FK {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
-	}
-
-	public PersonalData getPersonalData() {
-		return personalData;
-	}
-
-	public void setPersonalData(PersonalData personalData) {
-		this.personalData = personalData;
 	}
 
 	public HabitatBi1To1FK getAddress() {

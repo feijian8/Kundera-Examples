@@ -57,11 +57,7 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
     @Test
     public void test()
     {
-        addPhotographer();
-        //updatePhotographer();
-        getPhotographer();
-        getAllPhotographers();
-        deletePhotographer();      
+        executeTests();    
 
     }
     
@@ -71,6 +67,15 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
     {
         PhotographerUni_1_1_1_M p = populatePhotographer();
         pickr.addPhotographer(p);
+    }
+    
+    @Override
+    protected void getPhotographer()
+    {
+        PhotographerUni_1_1_1_M p = (PhotographerUni_1_1_1_M) pickr.getPhotographer(PhotographerUni_1_1_1_M.class, ""
+                + photographerId);
+        assertPhotographer(p);
+        
     }
 
     @Override
@@ -84,18 +89,8 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
         pickr.mergePhotographer(p);
         
         PhotographerUni_1_1_1_M p2 = (PhotographerUni_1_1_1_M)pickr.getPhotographer(PhotographerUni_1_1_1_M.class, "" + photographerId);
-        Assert.assertNotNull(p2);
-        Assert.assertEquals("Vivek", p2.getPhotographerName());         
-    }
-
-    @Override
-    protected void getPhotographer()
-    {
-        PhotographerUni_1_1_1_M p = (PhotographerUni_1_1_1_M) pickr.getPhotographer(PhotographerUni_1_1_1_M.class, ""
-                + photographerId);
-        assertPhotographer(p);
-        
-    }
+        assertModifiedPhotographer(p2);       
+    }    
 
     @Override
     protected void getAllPhotographers()
@@ -103,7 +98,7 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
         List<Object> ps = pickr.getAllPhotographers(PhotographerUni_1_1_1_M.class.getSimpleName());
         PhotographerUni_1_1_1_M p = (PhotographerUni_1_1_1_M)ps.get(0);
         
-        assertPhotographer(p);
+        assertModifiedPhotographer(p);
         
     }
 
@@ -111,7 +106,7 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
     protected void deletePhotographer()
     {
         PhotographerUni_1_1_1_M p = (PhotographerUni_1_1_1_M)pickr.getPhotographer(PhotographerUni_1_1_1_M.class, ""+photographerId);
-        assertPhotographer(p);
+        assertModifiedPhotographer(p);
         pickr.deletePhotographer(p);
         PhotographerUni_1_1_1_M p2 = (PhotographerUni_1_1_1_M)pickr.getPhotographer(PhotographerUni_1_1_1_M.class, ""+photographerId);
         Assert.assertNull(p2);
@@ -125,6 +120,37 @@ public class PickrTestUni_1_1_1_M extends PickrBaseTest {
         Assert.assertNotNull(p);
         Assert.assertEquals(1, p.getPhotographerId());
         Assert.assertEquals("Amresh", p.getPhotographerName());
+        
+        Assert.assertNotNull(p.getAlbum());
+        AlbumUni_1_1_1_M album = p.getAlbum();
+        Assert.assertNotNull(album);
+        Assert.assertTrue(album.getAlbumId().equals("album_1"));
+        Assert.assertEquals("My Phuket Vacation", album.getAlbumName());
+        Assert.assertEquals("Went Phuket with friends", album.getAlbumDescription());
+
+        List<PhotoUni_1_1_1_M> albumPhotos = album.getPhotos();
+        Assert.assertNotNull(albumPhotos);
+        Assert.assertFalse(albumPhotos.isEmpty());
+        Assert.assertEquals(3, albumPhotos.size());
+        
+        PhotoUni_1_1_1_M photo1 = albumPhotos.get(0);
+        PhotoUni_1_1_1_M photo2 = albumPhotos.get(0);
+        PhotoUni_1_1_1_M photo3 = albumPhotos.get(0);
+        
+        Assert.assertNotNull(photo1);
+        Assert.assertTrue(photo1.getPhotoId().startsWith("photo_"));
+        Assert.assertNotNull(photo2);
+        Assert.assertTrue(photo2.getPhotoId().startsWith("photo_"));
+        Assert.assertNotNull(photo3);
+        Assert.assertTrue(photo3.getPhotoId().startsWith("photo_"));
+        
+    }
+    
+    private void assertModifiedPhotographer(PhotographerUni_1_1_1_M p)
+    {
+        Assert.assertNotNull(p);
+        Assert.assertEquals(1, p.getPhotographerId());
+        Assert.assertEquals("Vivek", p.getPhotographerName());
         
         Assert.assertNotNull(p.getAlbum());
         AlbumUni_1_1_1_M album = p.getAlbum();

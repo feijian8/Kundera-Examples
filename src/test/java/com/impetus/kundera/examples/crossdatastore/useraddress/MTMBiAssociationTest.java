@@ -2,7 +2,11 @@ package com.impetus.kundera.examples.crossdatastore.useraddress;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.apache.cassandra.thrift.CfDef;
 import org.apache.cassandra.thrift.ColumnDef;
@@ -37,6 +41,11 @@ public class MTMBiAssociationTest extends TwinAssociation
         {
             CassandraCli.cassandraSetUp();
             
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }
+            
         }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelBiMToM.class);
@@ -63,19 +72,89 @@ public class MTMBiAssociationTest extends TwinAssociation
     public void testCRUD()
     {
         tryOperation();
-    }
-
-    @Override
-    protected void find()
-    {
-        // TODO Auto-generated method stub
-
-    }
+    }   
 
     @Override
     protected void insert()
     {
-        // TODO Auto-generated method stub
+        PersonnelBiMToM person1 = new PersonnelBiMToM();
+        person1.setPersonId("bimanytomany_1");
+        person1.setPersonName("Amresh");        
+
+        PersonnelBiMToM person2 = new PersonnelBiMToM();
+        person2.setPersonId("bimanytomany_2");
+        person2.setPersonName("Vivek");        
+
+        HabitatBiMToM address1 = new HabitatBiMToM();
+        address1.setAddressId("bimanytomany_a");
+        address1.setStreet("AAAAAAAAAAAAA");
+
+        HabitatBiMToM address2 = new HabitatBiMToM();
+        address2.setAddressId("bimanytomany_b");
+        address2.setStreet("BBBBBBBBBBBBBBB");
+
+        HabitatBiMToM address3 = new HabitatBiMToM();
+        address3.setAddressId("bimanytomany_c");
+        address3.setStreet("CCCCCCCCCCC");
+
+        Set<HabitatBiMToM> person1Addresses = new HashSet<HabitatBiMToM>();
+        Set<HabitatBiMToM> person2Addresses = new HashSet<HabitatBiMToM>();
+
+        person1Addresses.add(address1);
+        person1Addresses.add(address2);
+
+        person2Addresses.add(address2);
+        person2Addresses.add(address3);
+
+        person1.setAddresses(person1Addresses);
+        person2.setAddresses(person2Addresses);
+        
+        Set<PersonnelBiMToM> persons = new HashSet<PersonnelBiMToM>();
+        persons.add(person1);
+        persons.add(person2);
+
+        dao.savePersons(persons);
+
+        col.add(person1);
+        col.add(person2);
+        col.add(address1);
+        col.add(address2);
+        col.add(address3);
+
+    }
+    
+    @Override
+    protected void find()
+    {
+        PersonnelBiMToM person1 = (PersonnelBiMToM) dao.findPerson(PersonnelBiMToM.class, "bimanytomany_1");
+        Assert.assertNotNull(person1);
+        Assert.assertEquals("bimanytomany_1", person1.getPersonId());
+        Assert.assertEquals("Amresh", person1.getPersonName());
+        
+        Set<HabitatBiMToM> addresses1 = person1.getAddresses();
+        Assert.assertNotNull(addresses1);
+        Assert.assertFalse(addresses1.isEmpty());
+        Assert.assertEquals(2, addresses1.size());
+        HabitatBiMToM address11 = (HabitatBiMToM) addresses1.toArray()[0];
+        Assert.assertNotNull(address11);
+        HabitatBiMToM address12 = (HabitatBiMToM) addresses1.toArray()[1];
+        Assert.assertNotNull(address12);
+
+        PersonnelBiMToM person2 = (PersonnelBiMToM) dao.findPerson(PersonnelBiMToM.class, "bimanytomany_2");
+        Assert.assertNotNull(person2);
+
+        Assert.assertEquals("bimanytomany_2", person2.getPersonId());
+        Assert.assertEquals("Vivek", person2.getPersonName());
+        
+        Set<HabitatBiMToM> addresses2 = person2.getAddresses();
+        Assert.assertNotNull(addresses2);
+        Assert.assertFalse(addresses2.isEmpty());
+        Assert.assertEquals(2, addresses2.size());
+        HabitatBiMToM address21 = (HabitatBiMToM) addresses2.toArray()[0];
+        Assert.assertNotNull(address21);
+        HabitatBiMToM address22 = (HabitatBiMToM) addresses2.toArray()[1];
+        Assert.assertNotNull(address22);
+
     }
 
     @Override
@@ -111,7 +190,7 @@ public class MTMBiAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
 
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
@@ -158,6 +237,8 @@ public class MTMBiAssociationTest extends TwinAssociation
         }
 
         CassandraCli.client.set_keyspace("KunderaExamples");
+        
+        loadDataForPersonnelAddress();
 
     }
 
@@ -215,6 +296,48 @@ public class MTMBiAssociationTest extends TwinAssociation
 
         }
         CassandraCli.client.set_keyspace("KunderaExamples");
+
+    }
+    
+    static void loadDataForPersonnelAddress() 
+    {
+        try
+        {
+            KsDef ksDef = CassandraCli.client.describe_keyspace("KunderaExamples");
+            CfDef cfDef2 = new CfDef();
+            cfDef2.name = "PERSONNEL_ADDRESS";
+            cfDef2.keyspace = "KunderaExamples";
+
+            List<CfDef> cfDefss = ksDef.getCf_defs(); 
+            CassandraCli.client.set_keyspace("KunderaExamples");
+            for (CfDef cfDef : cfDefss)
+            {
+
+                if (cfDef.getName().equalsIgnoreCase("PERSONNEL_ADDRESS"))
+                {
+
+                    CassandraCli.client.system_drop_column_family("PERSONNEL_ADDRESS");
+
+                }
+            }
+            CassandraCli.client.system_add_column_family(cfDef2);
+        }
+        catch (NotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvalidRequestException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SchemaDisagreementException e)
+        {
+            e.printStackTrace();
+        }
 
     }
 

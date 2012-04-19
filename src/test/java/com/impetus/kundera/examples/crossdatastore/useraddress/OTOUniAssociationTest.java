@@ -38,7 +38,6 @@ import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUni1To1FK;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUni1To1FK;
 
 /**
@@ -74,6 +73,11 @@ public class OTOUniAssociationTest extends TwinAssociation
         if (RUN_IN_EMBEDDED_MODE)
         {
             CassandraCli.cassandraSetUp();
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }
+            
         }
 
         List<Class> clazzz = new ArrayList<Class>(2);
@@ -120,8 +124,7 @@ public class OTOUniAssociationTest extends TwinAssociation
             PersonnelUni1To1FK person = new PersonnelUni1To1FK();
             HabitatUni1To1FK address = new HabitatUni1To1FK();
             person.setPersonId("unionetoonefk_1");
-            person.setPersonName("Amresh");
-            person.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+            person.setPersonName("Amresh");            
             address.setAddressId("unionetoonefk_a");
             address.setStreet("123, New street");
             person.setAddress(address);
@@ -145,10 +148,7 @@ public class OTOUniAssociationTest extends TwinAssociation
             Assert.assertNotNull(p);
             Assert.assertEquals("unionetoonefk_1", p.getPersonId());
             Assert.assertEquals("Amresh", p.getPersonName());
-            PersonalData pd = p.getPersonalData();
-            Assert.assertNotNull(pd);
-            Assert.assertEquals("www.amresh.com", pd.getWebsite());
-
+            
             HabitatUni1To1FK add = p.getAddress();
             Assert.assertNotNull(add);
             Assert.assertNotNull(add.getAddressId());
@@ -235,7 +235,7 @@ public class OTOUniAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
         ColumnDef columnDef = new ColumnDef(ByteBuffer.wrap("PERSON_NAME".getBytes()), "UTF8Type");

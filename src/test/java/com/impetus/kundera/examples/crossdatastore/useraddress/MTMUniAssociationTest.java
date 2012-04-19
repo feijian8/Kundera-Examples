@@ -40,7 +40,6 @@ import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUniMToM;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUniMToM;
 
 /**
@@ -59,11 +58,17 @@ public class MTMUniAssociationTest extends TwinAssociation
         {
             CassandraCli.cassandraSetUp();
 
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }
+            
         }
         List<Class> clazzz = new ArrayList<Class>(2);
         clazzz.add(PersonnelUniMToM.class);
         clazzz.add(HabitatUniMToM.class);
-        init(clazzz, ALL_PUs_UNDER_TEST);
+        init(clazzz, ALL_PUs_UNDER_TEST); 
+        
     }
 
     /**
@@ -99,13 +104,11 @@ public class MTMUniAssociationTest extends TwinAssociation
     {
         PersonnelUniMToM person1 = new PersonnelUniMToM();
         person1.setPersonId("unimanytomany_1");
-        person1.setPersonName("Amresh");
-        person1.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+        person1.setPersonName("Amresh");        
 
         PersonnelUniMToM person2 = new PersonnelUniMToM();
         person2.setPersonId("unimanytomany_2");
-        person2.setPersonName("Vivek");
-        person2.setPersonalData(new PersonalData("www.vivek.com", "vivek@gmail.com", "mevivs"));
+        person2.setPersonName("Vivek");        
 
         HabitatUniMToM address1 = new HabitatUniMToM();
         address1.setAddressId("unimanytomany_a");
@@ -152,9 +155,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         Assert.assertNotNull(person1);
         Assert.assertEquals("unimanytomany_1", person1.getPersonId());
         Assert.assertEquals("Amresh", person1.getPersonName());
-        PersonalData pd1 = person1.getPersonalData();
-        Assert.assertNotNull(pd1);
-        Assert.assertEquals("www.amresh.com", pd1.getWebsite());
+        
         Set<HabitatUniMToM> addresses1 = person1.getAddresses();
         Assert.assertNotNull(addresses1);
         Assert.assertFalse(addresses1.isEmpty());
@@ -169,9 +170,7 @@ public class MTMUniAssociationTest extends TwinAssociation
 
         Assert.assertEquals("unimanytomany_2", person2.getPersonId());
         Assert.assertEquals("Vivek", person2.getPersonName());
-        PersonalData pd2 = person2.getPersonalData();
-        Assert.assertNotNull(pd2);
-        Assert.assertEquals("www.vivek.com", pd2.getWebsite());
+        
         Set<HabitatUniMToM> addresses2 = person2.getAddresses();
         Assert.assertNotNull(addresses2);
         Assert.assertFalse(addresses2.isEmpty());
@@ -256,7 +255,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
 
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
@@ -303,6 +302,10 @@ public class MTMUniAssociationTest extends TwinAssociation
         }
 
         CassandraCli.client.set_keyspace("KunderaExamples");
+        
+        
+        loadDataForPersonnelAddress();
+       
 
     }
 
@@ -318,11 +321,7 @@ public class MTMUniAssociationTest extends TwinAssociation
         ColumnDef columnDef1 = new ColumnDef(ByteBuffer.wrap("STREET".getBytes()), "UTF8Type");
         columnDef1.index_type = IndexType.KEYS;
         cfDef2.addToColumn_metadata(columnDef1);
-        //
-        // ColumnDef columnDef3 = new ColumnDef(ByteBuffer.wrap("ADDRESS_ID"
-        // .getBytes()), "IntegerType");
-        // columnDef3.index_type = IndexType.KEYS;
-        // cfDef2.addToColumn_metadata(columnDef3);
+
 
         ColumnDef columnDef2 = new ColumnDef(ByteBuffer.wrap("PERSON_ID".getBytes()), "IntegerType");
         columnDef2.index_type = IndexType.KEYS;
@@ -361,30 +360,46 @@ public class MTMUniAssociationTest extends TwinAssociation
         CassandraCli.client.set_keyspace("KunderaExamples");
     }
 
-    /*
-     * private void loadDataForPersonnelAddress() throws
-     * InvalidRequestException, TException, SchemaDisagreementException { KsDef
-     * ksDef = null; CfDef cfDef2 = new CfDef(); cfDef2.name =
-     * "PERSONNEL_ADDRESS"; cfDef2.keyspace = "KunderaExamples";
-     * 
-     * ColumnDef columnDef1 = new ColumnDef(ByteBuffer.wrap("PERSON_ID"
-     * .getBytes()), "IntegerType"); columnDef1.index_type = IndexType.KEYS;
-     * cfDef2.addToColumn_metadata(columnDef1);
-     * 
-     * ColumnDef columnDef2 = new ColumnDef(ByteBuffer.wrap("ADDRESS_ID"
-     * .getBytes()), "IntegerType"); columnDef2.index_type = IndexType.KEYS;
-     * cfDef2.addToColumn_metadata(columnDef2); List<CfDef> cfDefs = new
-     * ArrayList<CfDef>(); cfDefs.add(cfDef2); List<CfDef> cfDefss =
-     * ksDef.getCf_defs(); //
-     * CassandraCli.client.set_keyspace("KunderaExamples"); for (CfDef cfDef :
-     * cfDefss) {
-     * 
-     * if (cfDef.getName().equalsIgnoreCase("PERSONNEL_ADDRESS")) {
-     * 
-     * CassandraCli.client .system_drop_column_family("PERSONNEL_ADDRESS");
-     * 
-     * } } CassandraCli.client.system_add_column_family(cfDef2);
-     * 
-     * }
-     */
+    static void loadDataForPersonnelAddress() 
+    {
+        try
+        {
+            KsDef ksDef = CassandraCli.client.describe_keyspace("KunderaExamples");
+            CfDef cfDef2 = new CfDef();
+            cfDef2.name = "PERSONNEL_ADDRESS";
+            cfDef2.keyspace = "KunderaExamples";
+
+            List<CfDef> cfDefss = ksDef.getCf_defs(); 
+            CassandraCli.client.set_keyspace("KunderaExamples");
+            for (CfDef cfDef : cfDefss)
+            {
+
+                if (cfDef.getName().equalsIgnoreCase("PERSONNEL_ADDRESS"))
+                {
+
+                    CassandraCli.client.system_drop_column_family("PERSONNEL_ADDRESS");
+
+                }
+            }
+            CassandraCli.client.system_add_column_family(cfDef2);
+        }
+        catch (NotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvalidRequestException e)
+        {
+            e.printStackTrace();
+        }
+        catch (TException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SchemaDisagreementException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+     
 }

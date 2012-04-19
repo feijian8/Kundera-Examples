@@ -4,7 +4,6 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -14,7 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERSONNEL", schema = "KunderaExamples@twissandra")
+@Table(name = "PERSONNEL", schema = "test")
 public class PersonnelUniMToM
 {
     @Id
@@ -23,9 +22,6 @@ public class PersonnelUniMToM
 
     @Column(name = "PERSON_NAME")
     private String personName;
-
-    @Embedded
-    PersonalData personalData;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "PERSONNEL_ADDRESS", joinColumns = { @JoinColumn(name = "PERSON_ID") }, inverseJoinColumns = { @JoinColumn(name = "ADDRESS_ID") })
@@ -60,21 +56,5 @@ public class PersonnelUniMToM
     {
         this.addresses = addresses;
     }
-
-    /**
-     * @return the personalData
-     */
-    public PersonalData getPersonalData()
-    {
-        return personalData;
-    }
-
-    /**
-     * @param personalData the personalData to set
-     */
-    public void setPersonalData(PersonalData personalData)
-    {
-        this.personalData = personalData;
-    }  
     
 }

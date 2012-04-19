@@ -23,8 +23,9 @@ import org.junit.Test;
 
 import com.impetus.kundera.examples.cli.CassandraCli;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatBi1To1FK;
-import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonalData;
+import com.impetus.kundera.examples.crossdatastore.useraddress.entities.HabitatUni1To1FK;
 import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelBi1To1FK;
+import com.impetus.kundera.examples.crossdatastore.useraddress.entities.PersonnelUni1To1FK;
 
 public class OTOBiAssociationTest extends TwinAssociation
 {
@@ -66,36 +67,14 @@ public class OTOBiAssociationTest extends TwinAssociation
         tryOperation();
     }
 
-    @Override
-    protected void find()
-    {
-        // Find Person
-        PersonnelBi1To1FK p = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
-        Assert.assertNotNull(p);
-        Assert.assertEquals("bionetoonefk_1", p.getPersonId());
-        Assert.assertEquals("Amresh", p.getPersonName());
-        PersonalData pd = p.getPersonalData();
-        Assert.assertNotNull(pd);
-        Assert.assertEquals("www.amresh.com", pd.getWebsite());
-
-        HabitatBi1To1FK address = p.getAddress();
-        Assert.assertNotNull(address);
-        Assert.assertEquals("bionetoonefk_a", address.getAddressId());
-        Assert.assertEquals("123, New street", address.getStreet());
-
-        PersonnelBi1To1FK pp = address.getPerson();
-        Assert.assertNotNull(pp);
-        Assert.assertEquals("bionetoonefk_1", pp.getPersonId());
-        Assert.assertEquals("Amresh", pp.getPersonName());
-    }
+    
 
     @Override
     protected void insert()
     {
         PersonnelBi1To1FK person = new PersonnelBi1To1FK();
         person.setPersonId("bionetoonefk_1");
-        person.setPersonName("Amresh");
-        person.setPersonalData(new PersonalData("www.amresh.com", "amry.ks@gmail.com", "xamry"));
+        person.setPersonName("Amresh");        
 
         HabitatBi1To1FK address = new HabitatBi1To1FK();
         address.setAddressId("bionetoonefk_a");
@@ -108,15 +87,90 @@ public class OTOBiAssociationTest extends TwinAssociation
         col.add(address);
 
     }
+    
+    @Override
+    protected void find()
+    {
+        // Find Person
+        PersonnelBi1To1FK p = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
+        
+        assertPersonnel(p);
+    }
+
+    
 
     @Override
     protected void update()
     {
+        try
+        {
+            PersonnelBi1To1FK p = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
+            assertPersonnel(p);
+            
+            dao.merge(p);   //This merge operation should do nothing since nothing has changed
+            
+            p = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
+            assertPersonnel(p);
+            
+            p.setPersonName("Saurabh");
+            p.getAddress().setStreet("Brand New Street");
+            dao.merge(p);
+            
+            PersonnelBi1To1FK pAfterMerge = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class,
+            "bionetoonefk_1");
+            assertPersonnelAfterUpdate(pAfterMerge);         
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
+    
 
     @Override
     protected void remove()
     {
+        PersonnelBi1To1FK p = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
+        assertPersonnelAfterUpdate(p);
+        
+        dao.remove("bionetoonefk_1", PersonnelBi1To1FK.class);
+        
+        PersonnelBi1To1FK pAfterRemoval = (PersonnelBi1To1FK) dao.findPerson(PersonnelBi1To1FK.class, "bionetoonefk_1");
+        Assert.assertNull(pAfterRemoval);
+    }
+    
+    private void assertPersonnel(PersonnelBi1To1FK p)
+    {
+        Assert.assertNotNull(p);
+        Assert.assertEquals("bionetoonefk_1", p.getPersonId());
+        Assert.assertEquals("Amresh", p.getPersonName());
+        
+        
+        HabitatBi1To1FK address = p.getAddress();
+        Assert.assertNotNull(address);
+        Assert.assertEquals("bionetoonefk_a", address.getAddressId());
+        Assert.assertEquals("123, New street", address.getStreet());
+
+        PersonnelBi1To1FK pp = address.getPerson();
+        Assert.assertNotNull(pp);
+        Assert.assertEquals("bionetoonefk_1", pp.getPersonId());
+        Assert.assertEquals("Amresh", pp.getPersonName());
+    }
+    
+    private void assertPersonnelAfterUpdate(PersonnelBi1To1FK pAfterMerge)
+    {        
+        Assert.assertNotNull(pAfterMerge);
+        Assert.assertEquals("Saurabh", pAfterMerge.getPersonName());
+        HabitatBi1To1FK addressAfterMerge = pAfterMerge.getAddress();
+        Assert.assertNotNull(addressAfterMerge);
+        Assert.assertEquals("Brand New Street", addressAfterMerge.getStreet());
+        
+        PersonnelBi1To1FK pp = addressAfterMerge.getPerson();
+        Assert.assertNotNull(pp);
+        Assert.assertEquals("bionetoonefk_1", pp.getPersonId());
+        Assert.assertEquals("Saurabh", pp.getPersonName());
     }
 
     /**
@@ -132,6 +186,11 @@ public class OTOBiAssociationTest extends TwinAssociation
         if (AUTO_MANAGE_SCHEMA)
         {
             CassandraCli.dropKeySpace("KunderaExamples");
+        } else {
+            if(AUTO_MANAGE_SCHEMA) {
+                CassandraCli.initClient();
+            }
+            
         }
     }
 
@@ -145,8 +204,7 @@ public class OTOBiAssociationTest extends TwinAssociation
         CfDef cfDef = new CfDef();
         cfDef.name = "PERSONNEL";
         cfDef.keyspace = "KunderaExamples";
-        // cfDef.setColumn_type("super");
-        cfDef.column_type = "Super";
+        //cfDef.column_type = "Super";
         cfDef.setComparator_type("UTF8Type");
         cfDef.setDefault_validation_class("UTF8Type");
         ColumnDef columnDef = new ColumnDef(ByteBuffer.wrap("PERSON_NAME".getBytes()), "UTF8Type");

@@ -2,8 +2,10 @@ package com.impetus.kundera.examples.crossdatastore.useraddress.entities;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -11,7 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PERSONNEL", schema = "KunderaExamples@twingo")
+@Table(name = "PERSONNEL", schema = "KunderaExamples@twissandra")
 public class PersonnelBiMToM
 {
     @Id
@@ -21,7 +23,7 @@ public class PersonnelBiMToM
     @Column(name = "PERSON_NAME")
     private String personName;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "PERSONNEL_ADDRESS", 
       joinColumns = {
         @JoinColumn(name="PERSON_ID")           

@@ -39,7 +39,6 @@ public class UserAddressDaoImpl extends BaseDao
     {
         em = getEntityManager(persistenceUnit);
         Object personnel = em.find(entityClass, personId);
-        //closeEntityManager();
         return personnel;
     }
 
@@ -61,14 +60,13 @@ public class UserAddressDaoImpl extends BaseDao
         em = getEntityManager(persistenceUnit);
         Object obj = em.find(clazz, pKey);
         em.remove(obj);
-        closeEntityManager();
-        
+        closeEntityManager();       
     }
    
     public void merge(Object modifiedObj)
     {
         em = getEntityManager(persistenceUnit);
-        em.merge(modifiedObj);
+        em.merge(modifiedObj); 
         closeEntityManager();
         
     }

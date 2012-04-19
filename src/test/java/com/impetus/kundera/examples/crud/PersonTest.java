@@ -204,8 +204,8 @@ public class PersonTest extends BaseTest
     public void onInsertHbase() throws Exception
     {
         HBaseCli.startCluster();
-        HBaseCli.createTable("KunderaExamples");
-        HBaseCli.addColumnFamily("KunderaExamples", "PERSON");
+        HBaseCli.createTable("PERSON");
+        //HBaseCli.addColumnFamily("KunderaExamples", "PERSON");
         Object p1 = prepareHbaseInstance("1", 10);
         Object p2 = prepareHbaseInstance("2", 20);
         Object p3 = prepareHbaseInstance("3", 15);

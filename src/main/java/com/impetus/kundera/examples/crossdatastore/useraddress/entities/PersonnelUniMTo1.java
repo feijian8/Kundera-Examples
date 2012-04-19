@@ -2,7 +2,6 @@ package com.impetus.kundera.examples.crossdatastore.useraddress.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -20,9 +19,6 @@ public class PersonnelUniMTo1 {
 	@Column(name = "PERSON_NAME")
 	private String personName;
 	
-	@Embedded
-	private PersonalData personalData;
-
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="ADDRESS_ID")
 	private HabitatUniMTo1 address;
@@ -41,14 +37,6 @@ public class PersonnelUniMTo1 {
 
 	public void setPersonId(String personId) {
 		this.personId = personId;
-	}	
-
-	public PersonalData getPersonalData() {
-		return personalData;
-	}
-
-	public void setPersonalData(PersonalData personalData) {
-		this.personalData = personalData;
 	}
 
 	public HabitatUniMTo1 getAddress() {

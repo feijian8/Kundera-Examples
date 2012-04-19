@@ -59,12 +59,7 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
     @Test
     public void test()
     {
-        addPhotographer();
-        //updatePhotographer();
-        getPhotographer();
-        getAllPhotographers();
-        deletePhotographer();      
-
+        executeTests();
     }
     
 
@@ -76,31 +71,7 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
         for(PhotographerUni_M_M_1_1 p : ps) {
             pickr.addPhotographer(p);
         }
-    }
-
-    @Override
-    protected void updatePhotographer()
-    {
-        PhotographerUni_M_M_1_1 p1 = (PhotographerUni_M_M_1_1) pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 1);
-        assertPhotographer(p1, 1);
-        p1.setPhotographerName("Amresh2"); 
-
-        pickr.mergePhotographer(p1);
-        
-        PhotographerUni_M_M_1_1 p1Modified = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 1);
-        Assert.assertNotNull(p1Modified);
-        Assert.assertEquals("Amresh2", p1Modified.getPhotographerName()); 
-        
-        PhotographerUni_M_M_1_1 p2 = (PhotographerUni_M_M_1_1) pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 2);
-        assertPhotographer(p2, 2);
-        p1.setPhotographerName("Vivek2"); 
-
-        pickr.mergePhotographer(p2);
-        
-        PhotographerUni_M_M_1_1 p2Modified = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 2);
-        Assert.assertNotNull(p2Modified);
-        Assert.assertEquals("Vivek2", p2Modified.getPhotographerName());  
-    }
+    }   
 
     @Override
     protected void getPhotographer()
@@ -111,6 +82,28 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
         PhotographerUni_M_M_1_1 p2 = (PhotographerUni_M_M_1_1) pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 2);
         assertPhotographer(p2, 2);       
     }
+    
+    @Override
+    protected void updatePhotographer()
+    {
+        PhotographerUni_M_M_1_1 p1 = (PhotographerUni_M_M_1_1) pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 1);
+        assertPhotographer(p1, 1);
+        p1.setPhotographerName("Amresh2"); 
+
+        pickr.mergePhotographer(p1);
+        
+        PhotographerUni_M_M_1_1 p1Modified = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 1);
+        assertModifiedPhotographer(p1Modified, 1); 
+        
+        PhotographerUni_M_M_1_1 p2 = (PhotographerUni_M_M_1_1) pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 2);
+        assertPhotographer(p2, 2);
+        p2.setPhotographerName("Vivek2"); 
+
+        pickr.mergePhotographer(p2);
+        
+        PhotographerUni_M_M_1_1 p2Modified = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 2);
+        assertModifiedPhotographer(p2Modified, 2);  
+    }
 
     @Override
     protected void getAllPhotographers()
@@ -118,9 +111,8 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
         List<Object> ps = pickr.getAllPhotographers(PhotographerUni_M_M_1_1.class.getSimpleName());
         
         for(Object p : ps) {
-            PhotographerUni_M_M_1_1 pp = (PhotographerUni_M_M_1_1)p;
-            Assert.assertNotNull(pp);
-            assertPhotographer(pp, pp.getPhotographerId());
+            PhotographerUni_M_M_1_1 pp = (PhotographerUni_M_M_1_1)p;            
+            assertModifiedPhotographer(pp, pp.getPhotographerId());
         }    
         
     }
@@ -129,7 +121,7 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
     protected void deletePhotographer()
     {
         PhotographerUni_M_M_1_1 p1 = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, "" + 1);
-        assertPhotographer(p1, 1);
+        assertModifiedPhotographer(p1, 1);
         pickr.deletePhotographer(p1);
         
         PhotographerUni_M_M_1_1 p1AfterDeletion = (PhotographerUni_M_M_1_1)pickr.getPhotographer(PhotographerUni_M_M_1_1.class, ""+1);
@@ -177,6 +169,61 @@ public class PickrTestUni_M_M_1_1 extends PickrBaseTest
             Assert.assertNotNull(p);
             Assert.assertEquals(2, p.getPhotographerId());
             Assert.assertEquals("Vivek", p.getPhotographerName());
+        
+            Assert.assertNotNull(p.getAlbums());
+            Assert.assertFalse(p.getAlbums().isEmpty());
+            Assert.assertEquals(2, p.getAlbums().size());
+            
+            AlbumUni_M_M_1_1 album1 = p.getAlbums().get(0);
+            Assert.assertNotNull(album1);
+            Assert.assertTrue(album1.getAlbumId().startsWith("album_"));            
+            PhotoUni_M_M_1_1 photo1 = album1.getPhoto();
+            Assert.assertNotNull(photo1);
+            Assert.assertTrue(photo1.getPhotoId().startsWith("photo_"));
+            
+            AlbumUni_M_M_1_1 album2 = p.getAlbums().get(1);
+            Assert.assertNotNull(album2);
+            Assert.assertTrue(album2.getAlbumId().startsWith("album_"));            
+            PhotoUni_M_M_1_1 photo2 = album2.getPhoto();
+            Assert.assertNotNull(photo2);
+            Assert.assertTrue(photo2.getPhotoId().startsWith("photo_"));                
+        } else {
+            Assert.fail("Invalid Photographer ID: " + photographerId);  
+        }     
+        
+    }
+    
+    private void assertModifiedPhotographer(PhotographerUni_M_M_1_1 p, int photographerId)
+    {     
+        
+        if(photographerId == 1) {
+            Assert.assertNotNull(p);
+            Assert.assertEquals(1, p.getPhotographerId());
+            Assert.assertEquals("Amresh2", p.getPhotographerName());
+        
+            Assert.assertNotNull(p.getAlbums());
+            Assert.assertFalse(p.getAlbums().isEmpty());
+            Assert.assertEquals(2, p.getAlbums().size());
+            
+            AlbumUni_M_M_1_1 album1 = p.getAlbums().get(0);
+            Assert.assertNotNull(album1);
+            Assert.assertTrue(album1.getAlbumId().startsWith("album_"));            
+            PhotoUni_M_M_1_1 photo1 = album1.getPhoto();
+            Assert.assertNotNull(photo1);
+            Assert.assertTrue(photo1.getPhotoId().startsWith("photo_"));
+            
+            AlbumUni_M_M_1_1 album2 = p.getAlbums().get(1);
+            Assert.assertNotNull(album2);
+            Assert.assertTrue(album2.getAlbumId().startsWith("album_"));            
+            PhotoUni_M_M_1_1 photo2 = album2.getPhoto();
+            Assert.assertNotNull(photo2);
+            Assert.assertTrue(photo2.getPhotoId().startsWith("photo_"));        
+     
+            
+        } else if(photographerId == 2) {
+            Assert.assertNotNull(p);
+            Assert.assertEquals(2, p.getPhotographerId());
+            Assert.assertEquals("Vivek2", p.getPhotographerName());
         
             Assert.assertNotNull(p.getAlbums());
             Assert.assertFalse(p.getAlbums().isEmpty());

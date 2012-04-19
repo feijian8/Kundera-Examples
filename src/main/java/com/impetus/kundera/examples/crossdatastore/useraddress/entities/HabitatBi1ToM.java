@@ -8,33 +8,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="ADDRESS", schema="KunderaExamples@twissandra")
+@Table(name = "ADDRESS", schema = "test")
 public class HabitatBi1ToM
 {
-    @Id    
+    @Id
     @Column(name = "ADDRESS_ID")
-    private String addressId;   
-   
+    private String addressId;
 
     @Column(name = "STREET")
-    private String street; 
-    
+    private String street;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="PERSON_ID")
-    private PersonnelBi1ToM person;   
-    	
+    @JoinColumn(name = "PERSON_ID")
+    private PersonnelBi1ToM person;
 
-	public String getAddressId() {
-		return addressId;
-	}
+    public String getAddressId()
+    {
+        return addressId;
+    }
 
-	public void setAddressId(String addressId) {
-		this.addressId = addressId;
-	}
+    public void setAddressId(String addressId)
+    {
+        this.addressId = addressId;
+    }
 
-	public String getStreet()
+    public String getStreet()
     {
         return street;
     }
@@ -44,13 +43,14 @@ public class HabitatBi1ToM
         this.street = street;
     }
 
-	public PersonnelBi1ToM getPerson() {
-		return person;
-	}
+    public PersonnelBi1ToM getPerson()
+    {
+        return person;
+    }
 
-	public void setPerson(PersonnelBi1ToM person) {
-		this.person = person;
-	}  
-    
+    public void setPerson(PersonnelBi1ToM person)
+    {
+        this.person = person;
+    }
 
 }

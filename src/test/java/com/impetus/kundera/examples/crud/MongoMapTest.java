@@ -47,7 +47,6 @@ public class MongoMapTest
     /**
      * Test case for @see https://github.com/impetus-opensource/Kundera/issues/49
      */
-    @Test
     public void testMapIssue()
     {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("twingo");

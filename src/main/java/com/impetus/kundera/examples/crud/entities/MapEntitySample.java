@@ -19,9 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * Sample entity to hold map @see https://github.com/impetus-opensource/Kundera/issues/49
@@ -29,8 +27,8 @@ import javax.persistence.Table;
  * @author vivek.mishra
  *
  */
-@Entity
-@Table(name = "MapEntitySample", schema = "KunderaExamples@twingo")
+//@Entity
+//@Table(name = "MapEntitySample", schema = "KunderaExamples@twingo")
 public class MapEntitySample
 {
 

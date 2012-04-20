@@ -177,7 +177,7 @@ public abstract class BaseTest
      */
     protected <E extends Object> void assertFindByNameAndAge(EntityManager em, String clazz, E e, String name, String minVal, String fieldName)
     {
-        Query q = em.createQuery("Select p from " + clazz + " p where p."+fieldName+" = "+name+" and p.AGE > "+ minVal);
+        Query q = em.createQuery("Select p from " + clazz + " p where p."+fieldName+" = "+name+" and p.age > "+ minVal);
         List<E> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertFalse(results.isEmpty());
@@ -200,7 +200,7 @@ public abstract class BaseTest
     {
         // // // find by name, age clause
         Query q = em.createQuery("Select p from " + clazz
-                + " p where p."+fieldName+" = " + name + " and p.AGE > "+ minVal+ " and p.AGE < " +maxVal);
+                + " p where p."+fieldName+" = " + name + " and p.age > "+ minVal+ " and p.age < " +maxVal);
         List<E> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertFalse(results.isEmpty());
@@ -223,7 +223,7 @@ public abstract class BaseTest
     {
         // // find by between clause
         Query q = em.createQuery("Select p from " + clazz
-                + " p where p."+fieldName+" = "+name+" and p.AGE between "+minVal+" and "+maxVal);
+                + " p where p."+fieldName+" = "+name+" and p.age between "+minVal+" and "+maxVal);
         List<E> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertFalse(results.isEmpty());

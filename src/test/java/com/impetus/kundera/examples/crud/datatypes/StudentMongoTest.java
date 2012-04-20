@@ -81,19 +81,19 @@ public class StudentMongoTest extends StudentBase<StudentMongo>
         assertOnDataTypes((StudentMongo) s);
 
         // // find by name.
-        assertFindByName(em, "StudentMongo", StudentMongo.class, "Amresh","STUDENT_NAME");
+        assertFindByName(em, "StudentMongo", StudentMongo.class, "Amresh","studentName");
 
         // find by name and age.
-        assertFindByNameAndAge(em, "StudentMongo", StudentMongo.class, "Amresh", "10","STUDENT_NAME");
+        assertFindByNameAndAge(em, "StudentMongo", StudentMongo.class, "Amresh", "10","studentName");
 
         // find by name, age clause
-        assertFindByNameAndAgeGTAndLT(em, "StudentMongo", StudentMongo.class, "Amresh", "10", "20","STUDENT_NAME");
+        assertFindByNameAndAgeGTAndLT(em, "StudentMongo", StudentMongo.class, "Amresh", "10", "20","studentName");
         //
         // // find by between clause
-        assertFindByNameAndAgeBetween(em, "StudentMongo", StudentMongo.class, "Amresh", "10", "15","STUDENT_NAME");
+        assertFindByNameAndAgeBetween(em, "StudentMongo", StudentMongo.class, "Amresh", "10", "15","studentName");
 
         // find by Range.
-        assertFindByRange(em, "StudentMongo", StudentMongo.class, "12345677", "12345678","STUDENT_ID");
+        assertFindByRange(em, "StudentMongo", StudentMongo.class, "12345677", "12345678","studentId");
 
         // find by without where clause.
         assertFindWithoutWhereClause(em, "StudentMongo", StudentMongo.class);

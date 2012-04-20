@@ -81,19 +81,19 @@ public class StudentRdbmsTest extends StudentBase<StudentRdbms>
         assertOnDataTypes((StudentRdbms) s);
 
         // // find by name.
-        assertFindByName(em, "StudentRdbms", StudentRdbms.class, "Amresh","STUDENT_NAME");
+        assertFindByName(em, "StudentRdbms", StudentRdbms.class, "Amresh","studentName");
 
         // find by name and age.
-        assertFindByNameAndAge(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10","STUDENT_NAME");
+        assertFindByNameAndAge(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10","studentName");
 
         // find by name, age clause
-        assertFindByNameAndAgeGTAndLT(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10", "20","STUDENT_NAME");
+        assertFindByNameAndAgeGTAndLT(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10", "20","studentName");
         //
         // // find by between clause
-        assertFindByNameAndAgeBetween(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10", "15","STUDENT_NAME");
+        assertFindByNameAndAgeBetween(em, "StudentRdbms", StudentRdbms.class, "Amresh", "10", "15","studentName");
 
         // find by Range.
-        assertFindByRange(em, "StudentRdbms", StudentRdbms.class, "12345677", "12345678","STUDENT_ID");
+        assertFindByRange(em, "StudentRdbms", StudentRdbms.class, "12345677", "12345678","studentId");
 
         // find by without where clause.
         assertFindWithoutWhereClause(em, "StudentRdbms", StudentRdbms.class);

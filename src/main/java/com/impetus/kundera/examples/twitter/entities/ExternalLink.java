@@ -27,7 +27,7 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "EXTERNAL_LINK", schema = "KunderaExamples@twingo")
+@Table(name = "EXTERNAL_LINK", schema = "KunderaExamples@secIdxCassandra")
 public class ExternalLink
 {
 

@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERSON", schema = "KunderaExamples@twingo")
-@NamedQuery(name="mongo.named.query", query="Select p from PersonMongo p where p.PERSON_NAME = :name")
+@NamedQuery(name="mongo.named.query", query="Select p from PersonMongo p where p.personName = :name")
 public class PersonMongo
 {
     

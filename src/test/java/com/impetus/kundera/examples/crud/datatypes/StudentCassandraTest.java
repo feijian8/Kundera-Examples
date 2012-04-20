@@ -120,21 +120,21 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
         assertOnDataTypes((StudentCassandra) s);
 
         // // find by name.
-        assertFindByName(em, "StudentCassandra", StudentCassandra.class, "Amresh", "STUDENT_NAME");
+        assertFindByName(em, "StudentCassandra", StudentCassandra.class, "Amresh", "studentName");
 
         // find by name and age.
-        assertFindByNameAndAge(em, "StudentCassandra", StudentCassandra.class, "Amresh", "10", "STUDENT_NAME");
+        assertFindByNameAndAge(em, "StudentCassandra", StudentCassandra.class, "Amresh", "10", "studentName");
 
         // find by name, age clause
         assertFindByNameAndAgeGTAndLT(em, "StudentCassandra", StudentCassandra.class, "Amresh", "10", "20",
-                "STUDENT_NAME");
+                "studentName");
         //
         // // find by between clause
         assertFindByNameAndAgeBetween(em, "StudentCassandra", StudentCassandra.class, "Amresh", "10", "15",
-                "STUDENT_NAME");
+                "studentName");
 
         // find by Range.
-        assertFindByRange(em, "StudentCassandra", StudentCassandra.class, "12345677", "12345678", "STUDENT_ID");
+        assertFindByRange(em, "StudentCassandra", StudentCassandra.class, "12345677", "12345678", "studentId");
 
         // find by without where clause.
         assertFindWithoutWhereClause(em, "StudentCassandra", StudentCassandra.class);
@@ -163,7 +163,7 @@ public class StudentCassandraTest extends StudentBase<StudentCassandra>
         em.merge(s);
         // emf.close();
 //        assertOnMerge(em, "StudentCassandra", StudentCassandra.class, "Amresh", "NewAmresh", "STUDENT_NAME");
-        Query q = em.createQuery("Select p from StudentCassandra p where p.STUDENT_NAME = NewAmresh");
+        Query q = em.createQuery("Select p from StudentCassandra p where p.studentName = NewAmresh");
         List<StudentCassandra> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertEquals(1, results.size());

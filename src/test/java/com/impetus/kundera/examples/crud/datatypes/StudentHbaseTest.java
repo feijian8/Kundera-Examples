@@ -91,19 +91,19 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
         assertOnDataTypes((StudentHbase) s);
 
         // // find by name.
-        assertFindByName(em, "StudentHbase", StudentHbase.class, "Amresh", "STUDENT_NAME");
+        assertFindByName(em, "StudentHbase", StudentHbase.class, "Amresh", "studentName");
 
         // find by name and age.
-        assertFindByNameAndAge(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "STUDENT_NAME");
+        assertFindByNameAndAge(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "studentName");
 
         // find by name, age clause
-        assertFindByNameAndAgeGTAndLT(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "20", "STUDENT_NAME");
+        assertFindByNameAndAgeGTAndLT(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "20", "studentName");
         //
         // // find by between clause
-        assertFindByNameAndAgeBetween(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "15", "STUDENT_NAME");
+        assertFindByNameAndAgeBetween(em, "StudentHbase", StudentHbase.class, "Amresh", "10", "15", "studentName");
 
         // find by Range.
-        assertFindByRange(em, "StudentHbase", StudentHbase.class, "12345677", "12345678", "STUDENT_ID");
+        assertFindByRange(em, "StudentHbase", StudentHbase.class, "12345677", "12345678", "studentId");
 
         // find by without where clause.
         assertFindWithoutWhereClause(em, "StudentHbase", StudentHbase.class);
@@ -125,7 +125,7 @@ public class StudentHbaseTest extends StudentBase<StudentHbase>
         s.setStudentName("NewAmresh");
         em.merge(s);
         // emf.close();
-        Query q = em.createQuery("Select p from StudentHbase p where p.STUDENT_NAME = NewAmresh");
+        Query q = em.createQuery("Select p from StudentHbase p where p.studentName = NewAmresh");
         List<StudentHbase> results = q.getResultList();
         Assert.assertNotNull(results);
         Assert.assertEquals(1, results.size());

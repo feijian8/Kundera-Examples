@@ -25,7 +25,7 @@
 		<url>http://code.google.com/p/kundera/issues/list</url>
 	</issueManagement>
 
-	<distributionManagement>
+<!--	<distributionManagement>
 		<site>
 			<id>website</id>
 			<url>http://kundera.googlecode.com/svn/trunk</url>
@@ -41,7 +41,7 @@
 		</snapshotRepository>
 
 	</distributionManagement>
-
+-->
 	<repositories>
 		<repository>
 			<id>kundera-missing</id>
@@ -77,7 +77,18 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-	</repositories>
+<repository>
+		    <id>sonatype-nexus</id>
+		    <name>Kundera Public Repository</name>
+		    <url>https://oss.sonatype.org/content/repositories/releases</url>
+		    <releases>
+			<enabled>true</enabled>
+		    </releases>
+		    <snapshots>
+			<enabled>false</enabled>
+		    </snapshots>
+	      </repository>	
+</repositories>
 	<reporting>
 		<plugins>
 			<plugin>
@@ -312,22 +323,22 @@
 		<dependency>
 			<groupId>com.impetus.client</groupId>
 			<artifactId>kundera-cassandra</artifactId>
-			<version>2.0.6-SNAPSHOT</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.impetus.client</groupId>
 			<artifactId>kundera-hbase</artifactId>
-			<version>2.0.6-SNAPSHOT</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.impetus.client</groupId>
 			<artifactId>kundera-mongo</artifactId>
-			<version>2.0.6-SNAPSHOT</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.impetus.client</groupId>
 			<artifactId>kundera-rdbms</artifactId>
-			<version>2.0.6-SNAPSHOT</version>
+			<version>2.0.6</version>
 		</dependency>
 
 		<!-- Hector dependencies -->

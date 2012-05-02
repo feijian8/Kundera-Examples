@@ -103,18 +103,23 @@ public class PersonTest extends BaseTest
         PersonMongo p = findById(PersonMongo.class, "1", em);
         Assert.assertNotNull(p);
         Assert.assertEquals("vivek", p.getPersonName());
-        assertFindByName(em, "PersonMongo", PersonMongo.class, "vivek", "PERSON_NAME");
-        assertFindByNameAndAge(em, "PersonMongo", PersonMongo.class, "vivek", "10", "PERSON_NAME");
-        assertFindByNameAndAgeGTAndLT(em, "PersonMongo", PersonMongo.class, "vivek", "10", "20", "PERSON_NAME");
-        assertFindByNameAndAgeBetween(em, "PersonMongo", PersonMongo.class, "vivek", "10", "15", "PERSON_NAME");
-        assertFindByRange(em, "PersonMongo", PersonMongo.class, "1", "2", "PERSON_ID");
+        assertFindByName(em, "PersonMongo", PersonMongo.class, "vivek", "personName");
+        assertFindByNameAndAge(em, "PersonMongo", PersonMongo.class, "vivek", "10", "personName");
+        assertFindByNameAndAgeGTAndLT(em, "PersonMongo", PersonMongo.class, "vivek", "10", "20", "personName");
+        assertFindByNameAndAgeBetween(em, "PersonMongo", PersonMongo.class, "vivek", "10", "15", "personName");
+        assertFindByRange(em, "PersonMongo", PersonMongo.class, "1", "2", "personId");
         assertFindWithoutWhereClause(em, "PersonMongo", PersonMongo.class);
 
         Query query = em.createNamedQuery("mongo.named.query");
         query.setParameter("name", "vivek");
         List<PersonMongo> results = query.getResultList();
         Assert.assertEquals(3, results.size());
-    }
+
+        query = em.createNamedQuery("mongo.position.query");
+        query.setParameter(1, "vivek");
+        results = query.getResultList();
+        Assert.assertEquals(3, results.size());
+}
 
     /**
      * On merge mongo.
@@ -137,7 +142,7 @@ public class PersonTest extends BaseTest
         // modify record.
         p.setPersonName("newvivek");
         em.merge(p);
-        assertOnMerge(em, "PersonMongo", PersonMongo.class, "vivek", "newvivek", "PERSON_NAME");
+        assertOnMerge(em, "PersonMongo", PersonMongo.class, "vivek", "newvivek", "personName");
     }
 
     /**
@@ -164,11 +169,11 @@ public class PersonTest extends BaseTest
         PersonCassandra p = findById(PersonCassandra.class, "1", em);
         Assert.assertNotNull(p);
         Assert.assertEquals("vivek", p.getPersonName());
-        assertFindByName(em, "PersonCassandra", PersonCassandra.class, "vivek", "PERSON_NAME");
-        assertFindByNameAndAge(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "PERSON_NAME");
-        assertFindByNameAndAgeGTAndLT(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "20", "PERSON_NAME");
-        assertFindByNameAndAgeBetween(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "15", "PERSON_NAME");
-        assertFindByRange(em, "PersonCassandra", PersonCassandra.class, "1", "2", "PERSON_ID");
+        assertFindByName(em, "PersonCassandra", PersonCassandra.class, "vivek", "personName");
+        assertFindByNameAndAge(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "personName");
+        assertFindByNameAndAgeGTAndLT(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "20", "personName");
+        assertFindByNameAndAgeBetween(em, "PersonCassandra", PersonCassandra.class, "vivek", "10", "15", "personName");
+        assertFindByRange(em, "PersonCassandra", PersonCassandra.class, "1", "2", "personId");
         assertFindWithoutWhereClause(em, "PersonCassandra", PersonCassandra.class);
     }
 
@@ -197,7 +202,7 @@ public class PersonTest extends BaseTest
         p.setPersonName("newvivek");
         em.merge(p);
 
-        assertOnMerge(em, "PersonCassandra", PersonCassandra.class, "vivek", "newvivek", "PERSON_NAME");
+        assertOnMerge(em, "PersonCassandra", PersonCassandra.class, "vivek", "newvivek", "personName");
     }
 
     @Test
@@ -218,11 +223,11 @@ public class PersonTest extends BaseTest
         PersonHBase personHBase = findById(PersonHBase.class, "1", em);
         Assert.assertNotNull(personHBase);
         Assert.assertEquals("vivek", personHBase.getPersonName());
-        assertFindByName(em, "PersonHBase", PersonHBase.class, "vivek", "PERSON_NAME");
-        assertFindByNameAndAge(em, "PersonHBase", PersonHBase.class, "vivek", "10", "PERSON_NAME");
-        assertFindByNameAndAgeGTAndLT(em, "PersonHBase", PersonHBase.class, "vivek", "10", "20", "PERSON_NAME");
-        assertFindByNameAndAgeBetween(em, "PersonHBase", PersonHBase.class, "vivek", "10", "15", "PERSON_NAME");
-        assertFindByRange(em, "PersonHBase", PersonHBase.class, "1", "2", "PERSON_ID");
+        assertFindByName(em, "PersonHBase", PersonHBase.class, "vivek", "personName");
+        assertFindByNameAndAge(em, "PersonHBase", PersonHBase.class, "vivek", "10", "personName");
+        assertFindByNameAndAgeGTAndLT(em, "PersonHBase", PersonHBase.class, "vivek", "10", "20", "personName");
+        assertFindByNameAndAgeBetween(em, "PersonHBase", PersonHBase.class, "vivek", "10", "15", "personName");
+        assertFindByRange(em, "PersonHBase", PersonHBase.class, "1", "2", "personId");
         assertFindWithoutWhereClause(em, "PersonHBase", PersonHBase.class);
     }
 
@@ -257,11 +262,11 @@ public class PersonTest extends BaseTest
         PersonRDBMS personRDBMS = findById(PersonRDBMS.class, "1", em);
         Assert.assertNotNull(personRDBMS);
         Assert.assertEquals("vivek", personRDBMS.getPersonName());
-        assertFindByName(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "PERSON_NAME");
-        assertFindByNameAndAge(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "PERSON_NAME");
-        assertFindByNameAndAgeGTAndLT(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "20", "PERSON_NAME");
-        assertFindByNameAndAgeBetween(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "15", "PERSON_NAME");
-        assertFindByRange(em, "PersonRDBMS", PersonRDBMS.class, "1", "2", "PERSON_ID");
+        assertFindByName(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "personName");
+        assertFindByNameAndAge(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "personName");
+        assertFindByNameAndAgeGTAndLT(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "20", "personName");
+        assertFindByNameAndAgeBetween(em, "PersonRDBMS", PersonRDBMS.class, "vivek", "10", "15", "personName");
+        assertFindByRange(em, "PersonRDBMS", PersonRDBMS.class, "1", "2", "personId");
         assertFindWithoutWhereClause(em, "PersonRDBMS", PersonRDBMS.class);
     }
 

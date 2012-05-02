@@ -3,6 +3,7 @@ package com.impetus.kundera.examples.crud.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -11,7 +12,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PERSON", schema = "KunderaExamples@twingo")
-@NamedQuery(name="mongo.named.query", query="Select p from PersonMongo p where p.personName = :name")
+@NamedQueries(value={@NamedQuery(name="mongo.named.query", query="Select p from PersonMongo p where p.personName = :name"),@NamedQuery(name="mongo.position.query", query="Select p from PersonMongo p where p.personName = ?1")})
+
 public class PersonMongo
 {
     

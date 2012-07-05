@@ -110,16 +110,16 @@ public abstract class TwitterTestBase extends TestCase
     protected void executeTestSuite()
     {
         //Insert, Find and Update
-         addAllUserInfo();
-         getUserById();
-         updateUser();
-         
+        // addAllUserInfo();
+         //getUserById();
+         //updateUser();
+        getPersonalDetailByName();
          //Queries
-         getAllUsers();
-         getAllTweets();
+        // getAllUsers();
+        // getAllTweets();
          
          //Remove Users
-         removeUser();          
+         //removeUser();          
 
     }
 
@@ -352,6 +352,14 @@ public abstract class TwitterTestBase extends TestCase
         assertEquals(1, webTweets.size());
         assertEquals(1, mobileTweets.size());
 
+    }
+    
+    public void getPersonalDetailByName()
+    {
+        twitter.createEntityManager();
+        PersonalDetail pd = twitter.findPersonalDetailByName("Amresh");   
+        
+        twitter.closeEntityManager();
     }
 
     /**

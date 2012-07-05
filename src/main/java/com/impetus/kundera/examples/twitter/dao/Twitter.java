@@ -2,6 +2,7 @@ package com.impetus.kundera.examples.twitter.dao;
 
 import java.util.List;
 
+import com.impetus.kundera.examples.twitter.entities.PersonalDetail;
 import com.impetus.kundera.examples.twitter.entities.Preference;
 import com.impetus.kundera.examples.twitter.entities.Tweet;
 import com.impetus.kundera.examples.twitter.entities.User;
@@ -121,6 +122,9 @@ public interface Twitter
      * @return the list
      */
     List<Tweet> findTweetByBody(String tweetBody);
+    
+    
+    PersonalDetail findPersonalDetailByName(String name);
 
     /**
      * Find tweet by device.

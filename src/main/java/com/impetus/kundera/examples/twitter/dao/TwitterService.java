@@ -22,6 +22,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import com.impetus.kundera.examples.twitter.entities.ExternalLink;
+import com.impetus.kundera.examples.twitter.entities.PersonalDetail;
 import com.impetus.kundera.examples.twitter.entities.Preference;
 import com.impetus.kundera.examples.twitter.entities.Tweet;
 import com.impetus.kundera.examples.twitter.entities.User;
@@ -220,4 +221,14 @@ public class TwitterService extends SuperDao implements Twitter
         List<Tweet> tweets = q.getResultList();
         return tweets;
     }
+
+    @Override
+    public PersonalDetail findPersonalDetailByName(String name)
+    {
+        Query q = em.createQuery("select u.name from User u where u.name =:name");
+        q.setParameter("name", name);
+        List<PersonalDetail> personalDetails = q.getResultList();
+        return personalDetails.get(0);
+    }  
+    
 }

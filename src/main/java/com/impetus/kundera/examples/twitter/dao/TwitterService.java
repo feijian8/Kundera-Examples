@@ -225,7 +225,7 @@ public class TwitterService extends SuperDao implements Twitter
     @Override
     public PersonalDetail findPersonalDetailByName(String name)
     {
-        Query q = em.createQuery("select u.name from User u where u.name =:name");
+        Query q = em.createQuery("select u.personalDetail.name from User u where u.personalDetail.name =:name");
         q.setParameter("name", name);
         List<PersonalDetail> personalDetails = q.getResultList();
         return personalDetails.get(0);
